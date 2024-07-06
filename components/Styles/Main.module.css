@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  margin: 2rem 2rem;
+  flex-direction: column;
+}
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 12rem;
+  border: 2px solid #cdccca;
+  border-radius: 0.5rem;
+  font-size: large;
+  margin: 0.5rem;
+}
+p {
+  font-family: "YekanBakh";
+  font-size: 1.5rem;
+}

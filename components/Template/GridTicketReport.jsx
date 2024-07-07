@@ -87,6 +87,11 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
   }, []);
 
   useEffect(() => {
+    console.log(loading);
+    if (loading) gridRef.current?.api?.showLoadingOverlay();
+  }, [loading]);
+
+  useEffect(() => {
     let List = []; //برای اینکه هردفعه روی سرچ کلیک میشه لیست گرید خالی بشه
     if (ticketList?.tickets) {
       List = ticketList?.tickets?.map((item) => {
@@ -98,8 +103,6 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
 
     const pinnedList = pinnedbuttonRow(List);
     setPinnedRow(pinnedList);
-
-    setLoading(false); // تغییر وضعیت لودینگ
   }, [ticketList]);
 
   const filterChangeHandler = useCallback(
@@ -159,8 +162,8 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
           autoSizeStrategy={autoSizeStrategy}
           onGridReady={handleGridReady}
           gridOptions={gridOptions}
-          // loadingOverlayComponent={CustomLoadingOverlay}
-          noRowsOverlayComponent={NoRowsOverlay}
+          loadingOverlayComponent={() => <CustomLoadingOverlay />}
+          // noRowsOverlayComponent={loading ? customTicketList : NoRowsOverlay}
         />
       </div>
     </div>

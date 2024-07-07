@@ -43,12 +43,14 @@ function TicketReportSearch({ setTicketList, setLoading }) {
     let companiesToSend = selectedCompany.length
       ? selectedCompany
       : componies.map((company) => company.code);
+      
+      setLoading(true);
+
 
     const sDate = convertData(startDate);
     const eDate = convertData(endDate);
     setTicketList([]); // خالی کردن لیست در هر جستجو
     try {
-      // setLoading(true);
       const res = await Api.get("/api/v1.0-rc/reports/tickets", {
         params: {
           serverId: selectedServer,
@@ -58,7 +60,7 @@ function TicketReportSearch({ setTicketList, setLoading }) {
         },
       });
       setTicketList(res.data);
-      setLoading(true);
+     
     } catch (error) {
       setLoading(false);
       setTicketList([]);

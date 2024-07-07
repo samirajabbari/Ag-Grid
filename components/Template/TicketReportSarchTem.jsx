@@ -30,6 +30,7 @@ const sxStyle = {
   marginTop: "1rem",
   fontFamily: "IranSans",
   fontWeight: 200,
+  direction: "rtl",
 };
 const maskInputStyle = {
   border: "none",

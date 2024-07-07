@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -13,15 +13,30 @@ import Autocomplete from "@mui/material/Autocomplete";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import DatePicker from "react-multi-date-picker";
-import "./Styles/search.css";
+import Icon from "react-multi-date-picker/components/icon";
+import MaskedInput from "react-text-mask";
 
-const sxStyle = { marginTop: "1rem", fontFamily: "IranSans", fontWeight: 200 };
-const dataPickerStyle = {
-  width: "95%",
-  padding: "0.5rem",
+import "./Styles/search.css";
+const dataPickerDivStyles = {
+  display: "flex",
+  height: "3.3rem",
+  alignItems: "center",
+  border: "1px solid #cdccca",
+  borderRadius: "4px",
   marginTop: "1rem",
-  fontSize: "1rem",
 };
+const sxStyle = { marginTop: "1rem", fontFamily: "IranSans", fontWeight: 200 };
+const maskInputStyle = {
+  border: "none",
+  textAlign: "left",
+  direction: "ltr",
+  outline: "none",
+  width: "100%",
+  height: "90%",
+  fontSize: "1rem",
+  marginLeft: "0.5rem",
+};
+const dataPickerStyle = { marginLeft: "1rem" };
 
 function TicketReportSarchTem({
   selectedServer,
@@ -37,6 +52,25 @@ function TicketReportSarchTem({
   endDate,
   error,
 }) {
+  const handleMaskedInputChange = (e) => {
+    if (e.target.id === "STARTDATE") {
+      setStartDate(e.target.value);
+    } else {
+      setEndDate(e.target.value);
+    }
+  };
+  const handleStartPickerChange = (date) => {
+    const formattedDate = `${date.year}-${date.month
+      .toString()
+      .padStart(2, "0")}-${date.day.toString().padStart(2, "0")}`;
+    setStartDate(formattedDate);
+  };
+  const handleENdPickerChange = (date) => {
+    const formattedDate = `${date.year}-${date.month
+      .toString()
+      .padStart(2, "0")}-${date.day.toString().padStart(2, "0")}`;
+    setEndDate(formattedDate);
+  };
   return (
     <FormControl
       sx={{
@@ -95,23 +129,66 @@ function TicketReportSarchTem({
         />
 
         <Typography sx={sxStyle}>انتخاب تاریخ از:</Typography>
-        <DatePicker
-          value={startDate}
-          onChange={setStartDate}
-          calendar={persian}
-          locale={persian_fa}
-          style={dataPickerStyle}
-          calendarPosition="bottom-right"
-        />
+        <div style={dataPickerDivStyles}>
+          <MaskedInput
+            mask={[/\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, "-", /\d/, /\d/]}
+            placeholder="----/--/--"
+            value={startDate}
+            onChange={handleMaskedInputChange}
+            id="STARTDATE"
+            render={(ref, props) => (
+              <input ref={ref} {...props} style={maskInputStyle} />
+            )}
+          />
+          <DatePicker
+            value={startDate}
+            render={<Icon />}
+            onChange={handleStartPickerChange}
+            calendar={persian}
+            locale={persian_fa}
+            style={dataPickerStyle}
+            calendarPosition="bottom-left"
+            mapDays={({ date }) => {
+              let props = {};
+              let isWeekend = date.weekDay.index === 6;
+
+              if (isWeekend) props.className = "highlight highlight-red";
+
+              return props;
+            }}
+          />
+        </div>
+
         <Typography sx={sxStyle}>انتخاب تاریخ تا:</Typography>
-        <DatePicker
-          value={endDate}
-          onChange={setEndDate}
-          calendar={persian}
-          locale={persian_fa}
-          style={dataPickerStyle}
-          calendarPosition="bottom-right"
-        />
+        <div style={dataPickerDivStyles}>
+          <MaskedInput
+            mask={[/\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, "-", /\d/, /\d/]}
+            placeholder="----/--/--"
+            value={endDate}
+            onChange={handleMaskedInputChange}
+            id="ENDDATE"
+            render={(ref, props) => (
+              <input ref={ref} {...props} style={maskInputStyle} />
+            )}
+          />
+          <DatePicker
+            value={endDate}
+            render={<Icon />}
+            onChange={handleENdPickerChange}
+            calendar={persian}
+            locale={persian_fa}
+            style={dataPickerStyle}
+            calendarPosition="bottom-left"
+            mapDays={({ date }) => {
+              let props = {};
+              let isWeekend = date.weekDay.index === 6;
+
+              if (isWeekend) props.className = "highlight highlight-red";
+
+              return props;
+            }}
+          />
+        </div>
         {error && (
           <Typography color="error" sx={sxStyle}>
             بازه انتخابی باید بین یک ماه باشد

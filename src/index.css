@@ -31,3 +31,10 @@ a {
 .css-38raov-MuiButtonBase-root-MuiChip-root .MuiChip-deleteIcon {
   margin: 0 !important;
 }
+.rmdp-container svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.5rem;
+  color: #1976d2;
+}

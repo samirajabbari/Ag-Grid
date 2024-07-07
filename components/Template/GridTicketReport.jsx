@@ -21,7 +21,6 @@ import localeText from "../../Constant/LocalText";
 import pinnedbuttonRow from "../../utiles/ticketPinnedrow";
 import CustomLoadingOverlay from "./customLoadingOverlay";
 import NoRowsOverlay from "./NoRowsOverlay";
-import customLoadingOverlay from "./customLoadingOverlay";
 
 ModuleRegistry.registerModules([
   ClientSideRowModelModule,
@@ -32,7 +31,6 @@ ModuleRegistry.registerModules([
 ]);
 
 function GridTicketReport({ ticketList, setLoading, loading }) {
-  console.log("status Loading:", loading);
   const [pinedRow, setPinnedRow] = useState();
   const gridApiRef = useRef(null);
   const gridRef = useRef(null); // رفرنس گرید
@@ -86,7 +84,7 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
     const pinnedList = pinnedbuttonRow(List);
     setPinnedRow(pinnedList);
 
-    // setLoading(false); // تغییر وضعیت لودینگ
+    setLoading(false); // تغییر وضعیت لودینگ
   }, [ticketList]);
 
   const filterChangeHandler = useCallback(
@@ -120,16 +118,7 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
       gridApiRef.current.setFilterModel(null);
     }
   };
-  const gridOptions = {
-    getRowClass: (params) => {
-      if (params.node.rowPinned) {
-        return "my-pinned-row";
-      }
-      return null;
-    },
-    overlayLoadingTemplate:
-      '<span class="ag-overlay-loading-center">لطفا منتظر بمانید...</span>',
-  };
+
   return (
     <div style={containerStyle} className="rtlContainer">
       <div style={gridStyle} className={"ag-theme-quartz rtl-grid"}>
@@ -146,11 +135,8 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
           onFilterChanged={filterChangeHandler}
           autoSizeStrategy={autoSizeStrategy}
           onGridReady={handleGridReady}
-          gridOptions={gridOptions}
           // loadingOverlayComponent={CustomLoadingOverlay}
-          noRowsOverlayComponent={
-            loading ? customLoadingOverlay : NoRowsOverlay
-          }
+          noRowsOverlayComponent={NoRowsOverlay}
         />
       </div>
     </div>

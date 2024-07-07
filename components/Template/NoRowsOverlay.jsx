@@ -3,7 +3,7 @@ import { BeatLoader } from "react-spinners";
 export default (props) => {
   return (
     <div>
-      <p>دیتایی وجود ندارد</p>
+      <span style={{ fontFamily: "IranSans" }}>موردی پیدا نشد</span>
     </div>
   );
 };

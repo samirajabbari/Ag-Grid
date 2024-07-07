@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-
 import { serverContext } from "../../src/App";
 import componiesList from "../../utiles/companiesList";
 import convertData from "../../utiles/convertDate";
 import Api from "../../api/api";
 import validateDateRange from "../../utiles/validateDate";
 import TicketReportSarchTem from "./TicketReportSarchTem";
-import { set } from "date-fns";
 
 function TicketReportSearch({ setTicketList, setLoading }) {
   const [selectedCompany, setSelectedCompany] = useState([]);
@@ -17,7 +15,7 @@ function TicketReportSearch({ setTicketList, setLoading }) {
   const [error, setError] = useState(false);
 
   const serverHandler = (e) => {
-    setSelectedCompany([]); //در هر تغییر سرور لیست شرکت ها خالی بشه
+    setSelectedCompany([]); // در هر تغییر سرور لیست شرکت ها خالی بشه
     setSelectedServer(e.target.value);
   };
 
@@ -26,9 +24,11 @@ function TicketReportSearch({ setTicketList, setLoading }) {
       setSelectedCompany(e.target.value);
     }
   };
+
   useEffect(() => {
     setSelectedServer(server[1].id);
   }, []);
+
   const componies = componiesList(server, selectedServer);
 
   const searchHandler = async () => {
@@ -62,14 +62,14 @@ function TicketReportSearch({ setTicketList, setLoading }) {
       setLoading(true);
     } catch (error) {
       setLoading(false);
+      setTicketList([]);
       console.error("Error fetching tickets:", error);
       if (error.request.status === 404) {
-        alert("اطلاعاتی در بازه انتخابی پیدا نشد");
+        console.log("اطلاعاتی در بازه انتخابی پیدا نشد");
       }
+    } finally {
+      setLoading(false); // اطمینان از اجرای این خط بعد از try و catch
     }
-    //  finally {
-    //   setLoading(false); // اطمینان از اجرای این خط بعد از try و catch
-    // }
   };
 
   return (

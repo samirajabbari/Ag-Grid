@@ -4,7 +4,7 @@ import TicketReportSearch from "../Template/TicketReportSearch";
 import GridTicketReport from "../Template/GridTicketReport";
 function TicketReports() {
   const [ticketList, setTicketList] = useState();
-  const [loading, setLoading] = useState(false); //در ابتدا میازن لودینگ فالز شود
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className={styles.ticketsReport}>

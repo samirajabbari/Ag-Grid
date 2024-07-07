@@ -17,3 +17,6 @@ p {
   font-family: "YekanBakh";
   font-size: 1.5rem;
 }
+.top {
+  display: flex;
+}

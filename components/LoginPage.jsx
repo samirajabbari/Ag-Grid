@@ -1,9 +1,36 @@
 import React, { useContext, useState } from "react";
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Api from "../api/api";
 import { useNavigate } from "react-router-dom";
 import { TokenContext } from "../src/App";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
+const inputStyle = {
+  marginBottom: "1rem",
+  fontFamily: "IranSans",
+  fontSize: "1rem",
+};
+const typoStyle = {
+  margin: "2rem 0px",
+  fontWeight: "700",
+  textAlign: "center",
+  fontFamily: "IranSans",
+};
+
+const boxStyle = {
+  display: "flex",
+  flexDirection: "column",
+  width: "100%",
+  maxWidth: "400px",
+  alignItems: "center",
+};
 function LoginPage() {
   const navigate = useNavigate();
   const { token, setToken } = useContext(TokenContext);
@@ -57,30 +84,32 @@ function LoginPage() {
           maxWidth: "400px",
         }}
       >
-        <Typography
-          variant="h5"
-          sx={{
-            marginBottom: "2rem",
-            fontWeight: "700",
-            textAlign: "center",
-            fontFamily: "YekanBakh",
-          }}
-        >
-          ورود به صفحه کاربری
-        </Typography>
+        <Box sx={boxStyle}>
+          <Avatar sx={{ bgcolor: "#9c27b0" }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography variant="h5" sx={typoStyle}>
+            ورود به صفحه کاربری
+          </Typography>
+        </Box>
         <TextField
           placeholder="نام کاربری"
-          sx={{ marginBottom: "1rem",fontFamily: "YekanBakh",fontSize:"1rem"  }}
+          sx={inputStyle}
           onChange={usernameHandler}
         />
         <TextField
           placeholder="رمز عبور"
           type="password"
-          sx={{ marginBottom: "1rem",fontFamily: "YekanBakh",fontSize:"1rem" }}
+          sx={inputStyle}
           onChange={passwordHandler}
         />
-        <Button variant="contained" color="primary" onClick={checkHandler}sx={{ fontFamily: "YekanBakh",fontSize:"1rem" }} >
-          ورود
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={checkHandler}
+          sx={inputStyle}
+        >
+          ورود به پنل کاربری
         </Button>
       </Box>
     </Container>

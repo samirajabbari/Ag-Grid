@@ -4,6 +4,7 @@ import {
   Button,
   Checkbox,
   FormControl,
+  InputLabel,
   MenuItem,
   Select,
   TextField,
@@ -25,7 +26,11 @@ const dataPickerDivStyles = {
   borderRadius: "4px",
   marginTop: "1rem",
 };
-const sxStyle = { marginTop: "1rem", fontFamily: "IranSans", fontWeight: 200 };
+const sxStyle = {
+  marginTop: "1rem",
+  fontFamily: "IranSans",
+  fontWeight: 200,
+};
 const maskInputStyle = {
   border: "none",
   textAlign: "left",
@@ -86,6 +91,7 @@ function TicketReportSarchTem({
         }}
       >
         <Typography sx={sxStyle}>لیست سرورها</Typography>
+
         <Select sx={sxStyle} value={selectedServer} onChange={serverHandler}>
           {server.map((serverItem) => (
             <MenuItem key={serverItem.id} value={serverItem.id} sx={sxStyle}>
@@ -93,7 +99,6 @@ function TicketReportSarchTem({
             </MenuItem>
           ))}
         </Select>
-
         <Typography sx={sxStyle}>لیست شرکت ها</Typography>
         <Autocomplete
           multiple
@@ -127,7 +132,6 @@ function TicketReportSarchTem({
             />
           )}
         />
-
         <Typography sx={sxStyle}>انتخاب تاریخ از:</Typography>
         <div style={dataPickerDivStyles}>
           <MaskedInput
@@ -158,7 +162,6 @@ function TicketReportSarchTem({
             }}
           />
         </div>
-
         <Typography sx={sxStyle}>انتخاب تاریخ تا:</Typography>
         <div style={dataPickerDivStyles}>
           <MaskedInput

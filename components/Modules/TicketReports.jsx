@@ -5,6 +5,7 @@ import GridTicketReport from "../Template/GridTicketReport";
 function TicketReports() {
   const [ticketList, setTicketList] = useState();
   const [loading, setLoading] = useState(false);
+  const [toggel, setToggel] = useState(true);
 
   return (
     <div className={styles.ticketsReport}>

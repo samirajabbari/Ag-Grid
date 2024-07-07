@@ -5,7 +5,9 @@
 }
 .left {
   width: 30rem;
-  border: 2px solid #cdccca;
+  /* border: 2px solid #cdccca; */
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0px 10px 15px -3px rgba(0, 0, 0, 0.1);
   height: 90vh;
   border-radius: 1rem;
   padding: 1rem 0.5rem;
@@ -14,5 +16,6 @@
 .right {
   width: 100vw;
   margin-right: 0.5rem;
+
   /* overflow-y: scroll; */
 }

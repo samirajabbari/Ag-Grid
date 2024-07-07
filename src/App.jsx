@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { createTheme, ThemeProvider } from "@mui/material";
 import "./Styles/fonts.css";
 //---------------component / css --------------------
 import LoginPage from "../components/LoginPage";
@@ -22,30 +23,34 @@ function App() {
     setDeCodeToken(tokenDecoded);
     setToken(mainToken);
   }, []);
-
+  // const theme = createTheme({
+  //   direction: "rtl",
+  // });
   return (
-    <serverContext.Provider value={{ server, setServer }}>
-      <TokenContext.Provider value={{ token, setToken, decodedToken }}>
-        <BrowserRouter>
-          <Routes>
-            <Route
-              path="/login"
-              element={!token ? <LoginPage /> : <Navigate to={"/main"} />}
-            />
-            <Route
-              path="/main/*"
-              element={
-                <ProtectedRoute>
-                  <MainRoute />
-                </ProtectedRoute>
-              }
-            />
+    // <ThemeProvider theme={theme}>
+      <serverContext.Provider value={{ server, setServer }}>
+        <TokenContext.Provider value={{ token, setToken, decodedToken }}>
+          <BrowserRouter>
+            <Routes>
+              <Route
+                path="/login"
+                element={!token ? <LoginPage /> : <Navigate to={"/main"} />}
+              />
+              <Route
+                path="/main/*"
+                element={
+                  <ProtectedRoute>
+                    <MainRoute />
+                  </ProtectedRoute>
+                }
+              />
 
-            <Route path="/" element={<Navigate to="/main" />} />
-          </Routes>
-        </BrowserRouter>
-      </TokenContext.Provider>
-    </serverContext.Provider>
+              <Route path="/" element={<Navigate to="/main" />} />
+            </Routes>
+          </BrowserRouter>
+        </TokenContext.Provider>
+      </serverContext.Provider>
+    // </ThemeProvider>
   );
 }
 

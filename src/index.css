@@ -23,6 +23,7 @@ a {
 }
 * {
   font-family: "IranSans";
+  direction: rtl;
   font-weight: 200;
   /* text-align: right; */
   /* font-feature-settings: "ss01"; */

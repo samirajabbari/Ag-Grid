@@ -36,8 +36,23 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
   const gridRef = useRef(null); // رفرنس گرید
 
   const [customTicketList, setCustomTicketList] = useState([]);
-  const containerStyle = useMemo(() => ({ width: "100%", height: "100%" }), []);
-  const gridStyle = useMemo(() => ({ height: "100%", width: "100%" }), []);
+  const containerStyle = useMemo(
+    () => ({
+      width: "100%",
+      height: "100%",
+    }),
+    []
+  );
+  const gridStyle = useMemo(
+    () => ({
+      height: "100%",
+      width: "100%",
+      borderRadius: "8px",
+      boxShadow:
+        "0px 10px 15px -3px rgba(0,0,0,0.1),0px 10px 15px -3px rgba(0,0,0,0.1)",
+    }),
+    []
+  );
 
   const sideBar = useMemo(
     () => ({
@@ -118,6 +133,14 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
       gridApiRef.current.setFilterModel(null);
     }
   };
+  const gridOptions = {
+    getRowClass: (params) => {
+      if (params.node.rowPinned) {
+        return "my-pinned-row";
+      }
+      return null;
+    },
+  };
 
   return (
     <div style={containerStyle} className="rtlContainer">
@@ -135,6 +158,7 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
           onFilterChanged={filterChangeHandler}
           autoSizeStrategy={autoSizeStrategy}
           onGridReady={handleGridReady}
+          gridOptions={gridOptions}
           // loadingOverlayComponent={CustomLoadingOverlay}
           noRowsOverlayComponent={NoRowsOverlay}
         />

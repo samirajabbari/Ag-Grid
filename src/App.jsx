@@ -23,9 +23,9 @@ function App() {
     setDeCodeToken(tokenDecoded);
     setToken(mainToken);
   }, []);
-  // const theme = createTheme({
-  //   direction: "rtl",
-  // });
+  const theme = createTheme({
+    direction: "rtl",
+  });
   return (
     // <ThemeProvider theme={theme}>
       <serverContext.Provider value={{ server, setServer }}>

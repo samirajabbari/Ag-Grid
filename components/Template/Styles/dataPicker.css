@@ -1,0 +1,11 @@
+.dataPickerDivStyles {
+  display: flex;
+  height: 3.3rem;
+  align-items: center;
+  border: 1px solid #cdccca;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+.dataPickerDivStyles:hover {
+  border-color: #626262;
+}

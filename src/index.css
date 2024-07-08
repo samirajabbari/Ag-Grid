@@ -31,6 +31,10 @@ a {
 
 .css-38raov-MuiButtonBase-root-MuiChip-root .MuiChip-deleteIcon {
   margin: 0 !important;
+  color: rgb(243, 169, 169) !important;
+}
+.css-38raov-MuiButtonBase-root-MuiChip-root .MuiChip-deleteIcon :hover {
+  color: #ff6687 !important;
 }
 .rmdp-container svg {
   display: flex;
@@ -38,4 +42,16 @@ a {
   justify-content: center;
   margin-left: 0.5rem;
   color: #1976d2;
+}
+.css-hfutr2-MuiSvgIcon-root-MuiSelect-icon {
+  color: #1976d2 !important;
+}
+.css-bpeome-MuiSvgIcon-root-MuiSelect-icon {
+  color: #1976d2 !important;
+}
+.css-i4bv87-MuiSvgIcon-root {
+  color: #1976d2 !important;
+}
+.MuiCardHeader-avatar svg {
+  color: #ffffff !important;
 }

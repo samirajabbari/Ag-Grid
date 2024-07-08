@@ -16,22 +16,16 @@ import persian_fa from "react-date-object/locales/persian_fa";
 import DatePicker from "react-multi-date-picker";
 import Icon from "react-multi-date-picker/components/icon";
 import MaskedInput from "react-text-mask";
-
+import "./Styles/dataPicker.css";
 import "./Styles/search.css";
-const dataPickerDivStyles = {
-  display: "flex",
-  height: "3.3rem",
-  alignItems: "center",
-  border: "1px solid #cdccca",
-  borderRadius: "4px",
-  marginTop: "1rem",
-};
+
 const sxStyle = {
   marginTop: "1rem",
   fontFamily: "IranSans",
   fontWeight: 200,
   direction: "rtl",
 };
+
 const maskInputStyle = {
   border: "none",
   textAlign: "left",
@@ -42,7 +36,6 @@ const maskInputStyle = {
   fontSize: "1rem",
   marginLeft: "0.5rem",
 };
-const dataPickerStyle = { marginLeft: "1rem" };
 
 function TicketReportSarchTem({
   selectedServer,
@@ -79,6 +72,8 @@ function TicketReportSarchTem({
   };
   return (
     <FormControl
+      fullWidth
+      variant="outlined"
       sx={{
         display: "flex",
         alignItems: "center",
@@ -92,8 +87,12 @@ function TicketReportSarchTem({
         }}
       >
         <Typography sx={sxStyle}>لیست سرورها</Typography>
-
-        <Select sx={sxStyle} value={selectedServer} onChange={serverHandler}>
+        <Select
+          labelId="select-server-label"
+          sx={sxStyle}
+          value={selectedServer}
+          onChange={serverHandler}
+        >
           {server.map((serverItem) => (
             <MenuItem key={serverItem.id} value={serverItem.id} sx={sxStyle}>
               {serverItem.description}
@@ -134,7 +133,7 @@ function TicketReportSarchTem({
           )}
         />
         <Typography sx={sxStyle}>انتخاب تاریخ از:</Typography>
-        <div style={dataPickerDivStyles}>
+        <div className="dataPickerDivStyles">
           <MaskedInput
             mask={[/\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, "-", /\d/, /\d/]}
             placeholder="----/--/--"
@@ -151,7 +150,7 @@ function TicketReportSarchTem({
             onChange={handleStartPickerChange}
             calendar={persian}
             locale={persian_fa}
-            style={dataPickerStyle}
+            // className="dataPickerStyle"
             calendarPosition="bottom-left"
             mapDays={({ date }) => {
               let props = {};
@@ -164,7 +163,7 @@ function TicketReportSarchTem({
           />
         </div>
         <Typography sx={sxStyle}>انتخاب تاریخ تا:</Typography>
-        <div style={dataPickerDivStyles}>
+        <div className="dataPickerDivStyles">
           <MaskedInput
             mask={[/\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, "-", /\d/, /\d/]}
             placeholder="----/--/--"
@@ -181,7 +180,7 @@ function TicketReportSarchTem({
             onChange={handleENdPickerChange}
             calendar={persian}
             locale={persian_fa}
-            style={dataPickerStyle}
+            // style={dataPickerStyle}
             calendarPosition="bottom-left"
             mapDays={({ date }) => {
               let props = {};

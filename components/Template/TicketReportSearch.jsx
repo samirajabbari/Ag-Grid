@@ -6,7 +6,7 @@ import Api from "../../api/api";
 import validateDateRange from "../../utiles/validateDate";
 import TicketReportSarchTem from "./TicketReportSarchTem";
 
-function TicketReportSearch({ setTicketList, setLoading }) {
+function TicketReportSearch({ setTicketList, setLoading ,setToggel}) {
   const [selectedCompany, setSelectedCompany] = useState([]);
   const [selectedServer, setSelectedServer] = useState("");
   const { server } = useContext(serverContext);
@@ -88,7 +88,7 @@ function TicketReportSearch({ setTicketList, setLoading }) {
       startDate={startDate}
       endDate={endDate}
       error={error}
-    />
+      />
   );
 }
 

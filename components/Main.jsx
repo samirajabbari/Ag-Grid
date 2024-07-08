@@ -1,38 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import styles from "./Styles/Main.module.css";
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import { decodeToken } from "../utiles/DeCodeToken";
 import { TokenContext, serverContext } from "../src/App";
 import Api from "../api/api";
-import {
-  Avatar,
-  Box,
-  Card,
-  CardHeader,
-  IconButton,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Avatar, Card, CardHeader, Typography } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import PageviewIcon from "@mui/icons-material/Assignment";
-
-import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import ChartPanel from "./Modules/ChartPanel";
-
 const typoStyle = { fontFamily: "IranSans", fontWeight: 600 };
-const stackStyle = {
-  borderBottom: "2px solid rgba(0, 0, 0, 0.1)",
-  marginBottom: "1rem",
-  paddingBottom: "1rem",
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-};
 
-const iconButtonStyle = {
-  alignSelf: "flex-start",
-  marginLeft: "auto",
-};
 const cardStyle = {
   maxWidth: 200,
   alignItems: "center",
@@ -43,7 +20,6 @@ const cardStyle = {
 function Main() {
   const [name, setName] = useState();
   const { token } = useContext(TokenContext);
-  const navigate = useNavigate();
   useEffect(() => {
     const user = decodeToken(token);
     setName(user.userName);
@@ -70,27 +46,8 @@ function Main() {
 
     fetchServers();
   }, []);
-  const logOutHandler = () => {
-    sessionStorage.removeItem("mainToken");
-    navigate("/login");
-  };
   return (
     <div className={styles.container}>
-      <div>
-        <Stack spacing={2} direction="row" alignItems="center" sx={stackStyle}>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Avatar src="/broken-image.jpg" />
-            <Typography sx={{ ...typoStyle, m: 1 }}>{name}</Typography>
-          </Box>
-          <IconButton
-            aria-label="power settings"
-            sx={iconButtonStyle}
-            onClick={logOutHandler}
-          >
-            <PowerSettingsNewIcon />
-          </IconButton>
-        </Stack>
-      </div>
       <div className={styles.top}>
         <Link to={"/main/tickets-reports"}>
           <Card sx={cardStyle}>
@@ -117,6 +74,7 @@ function Main() {
           </Card>
         </Link>
       </div>
+
       <div className={styles.bottom}>
         <ChartPanel />
       </div>

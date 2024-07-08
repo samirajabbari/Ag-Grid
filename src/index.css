@@ -2,7 +2,7 @@
   /* font-family: "YekanBakh", -apple-system, BlinkMacSystemFont, "Segoe UI",
     "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
     "Helvetica Neue", sans-serif; */
-
+  height: 100%;
   background-color: #ffffff;
 
   /* font-synthesis: none; */
@@ -13,7 +13,7 @@
 
 body {
   margin: 0;
-
+  height: 100%;
   font-family: "IranSans", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -54,4 +54,10 @@ a {
 }
 .MuiCardHeader-avatar svg {
   color: #ffffff !important;
+}
+.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
+  font-family: "IranSans" !important;
+}
+.css-g9fo99-MuiAvatar-root svg {
+  color: #ffffff !important ;
 }

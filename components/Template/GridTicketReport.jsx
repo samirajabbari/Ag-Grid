@@ -87,7 +87,6 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
   }, []);
 
   useEffect(() => {
-    console.log(loading);
     if (loading) gridRef.current?.api?.showLoadingOverlay();
   }, [loading]);
 

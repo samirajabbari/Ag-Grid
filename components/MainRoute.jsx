@@ -1,21 +1,24 @@
-import React, { useEffect } from "react";
-import { Route, Routes, redirect, useNavigate } from "react-router-dom";
+import React from "react";
+import { Route, Routes } from "react-router-dom";
 import Main from "./Main";
 import TicketReports from "./Modules/TicketReports";
 import NotFound from "./NotFound";
 import ProtectedRoute from "./ProtectedRoute";
+import Layout from "./Layout/Layout";
 
 function MainRoute() {
   return (
     <>
-      <ProtectedRoute>
-        <Routes>
-          <Route path="" element={<Main />} />
-          <Route path="tickets-reports" element={<TicketReports />} />
+      <Layout>
+        <ProtectedRoute>
+          <Routes>
+            <Route path="" element={<Main />} />
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </ProtectedRoute>
+            <Route path="tickets-reports" element={<TicketReports />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </ProtectedRoute>
+      </Layout>
     </>
   );
 }

@@ -7,11 +7,11 @@ import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 function TicketReports() {
   const [ticketList, setTicketList] = useState();
   const [loading, setLoading] = useState(false);
-  const [toggel, setToggel] = useState(false);
+  const [toggel, setToggel] = useState(true);
   const toggelHandler = () => {
-    console.log(toggel);
     setToggel(!toggel);
   };
+
   return (
     <div className={styles.ticketsReport}>
       <div className={styles.left} style={{ width: toggel ? "30rem" : "2rem" }}>

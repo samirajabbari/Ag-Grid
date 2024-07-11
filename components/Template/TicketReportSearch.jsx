@@ -5,8 +5,10 @@ import convertData from "../../utiles/convertDate";
 import Api from "../../api/api";
 import validateDateRange from "../../utiles/validateDate";
 import TicketReportSarchTem from "./TicketReportSarchTem";
+import convertMiladiToShamsi from "../../utiles/MiladitoPersian";
+import persianDate from "persian-date";
 
-function TicketReportSearch({ setTicketList, setLoading ,setToggel}) {
+function TicketReportSearch({ setTicketList, setLoading, setToggel }) {
   const [selectedCompany, setSelectedCompany] = useState([]);
   const [selectedServer, setSelectedServer] = useState("");
   const { server } = useContext(serverContext);
@@ -29,6 +31,20 @@ function TicketReportSearch({ setTicketList, setLoading ,setToggel}) {
     setSelectedServer(server[1].id);
   }, []);
 
+  useEffect(() => {
+    const persianDateInstance = new persianDate();
+    persianDateInstance.toCalendar("persian");
+
+    const FisrtDayOfMounth = convertMiladiToShamsi(
+      persianDateInstance.startOf("month").State.gDate,
+      "D"
+    );
+    const today = convertMiladiToShamsi(persianDateInstance.State.gDate, "D");
+
+    setStartDate(FisrtDayOfMounth);
+    setEndDate(today);
+  }, []);
+
   const componies = componiesList(server, selectedServer);
 
   const searchHandler = async () => {
@@ -43,9 +59,8 @@ function TicketReportSearch({ setTicketList, setLoading ,setToggel}) {
     let companiesToSend = selectedCompany.length
       ? selectedCompany
       : componies.map((company) => company.code);
-      
-      setLoading(true);
 
+    setLoading(true);
 
     const sDate = convertData(startDate);
     const eDate = convertData(endDate);
@@ -60,7 +75,6 @@ function TicketReportSearch({ setTicketList, setLoading ,setToggel}) {
         },
       });
       setTicketList(res.data);
-     
     } catch (error) {
       setLoading(false);
       setTicketList([]);
@@ -88,7 +102,7 @@ function TicketReportSearch({ setTicketList, setLoading ,setToggel}) {
       startDate={startDate}
       endDate={endDate}
       error={error}
-      />
+    />
   );
 }
 

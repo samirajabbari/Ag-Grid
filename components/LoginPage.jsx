@@ -5,6 +5,7 @@ import {
   Button,
   Container,
   Grid,
+  IconButton,
   TextField,
   Typography,
 } from "@mui/material";
@@ -13,7 +14,8 @@ import { useNavigate } from "react-router-dom";
 import { TokenContext } from "../src/App";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import toast from "react-hot-toast";
-
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 const inputStyle = {
   marginBottom: "1rem",
   fontFamily: "IranSans",
@@ -39,6 +41,8 @@ function LoginPage() {
   const { token, setToken } = useContext(TokenContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const usernameHandler = (e) => {
     setUsername(e.target.value);
   };
@@ -68,7 +72,9 @@ function LoginPage() {
       toast.error("ورود ناموفق. لطفا مجددا تلاش کنید.");
     }
   };
-
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
   return (
     <Container
       maxWidth={false}
@@ -116,9 +122,20 @@ function LoginPage() {
             />
             <TextField
               placeholder="رمز عبور"
-              type="password"
+              type={showPassword ? "text" : "password"}
               sx={inputStyle}
               onChange={passwordHandler}
+              InputProps={{
+                endAdornment: (
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                ),
+              }}
             />
             <Button
               variant="contained"

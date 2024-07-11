@@ -18,6 +18,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 a {
   text-decoration: none;
 }
@@ -28,6 +29,29 @@ a {
   /* text-align: right; */
   /* font-feature-settings: "ss01"; */
 }
+/*----------------------------------scrolBar*/
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #15365a;
+  border-radius: 4px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #50a5ff;
+  border-radius: 4px;
+}
+/*----------------------------------MUI*/
 
 .css-38raov-MuiButtonBase-root-MuiChip-root .MuiChip-deleteIcon {
   margin: 0 !important;
@@ -60,4 +84,65 @@ a {
 }
 .css-g9fo99-MuiAvatar-root svg {
   color: #ffffff !important ;
+}
+.MuiAutocomplete-hasPopupIcon.css-1x6bjyf-MuiAutocomplete-root
+  .MuiOutlinedInput-root {
+  padding-right: 25px !important;
+}
+/* .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  text-align: right !important;
+} */
+.css-1uwyrp-MuiFormLabel-root-MuiInputLabel-root {
+  text-align: right;
+  right: 2rem !important;
+  left: none !important;
+  transform-origin: top right !important;
+  background-color: #ffffff !important;
+  width: fit-content !important ;
+  padding: 0px 5px !important;
+  font-weight: 800 !important;
+  color: #1976d2 !important;
+}
+.Mui-focused {
+  color: #1976d2 !important;
+}
+.dataPickerDivStyles :focus {
+  border-color: #1976d2 !important;
+}
+.css-v8nz9h-MuiButtonBase-root-MuiMenuItem-root {
+  margin: 0px !important;
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
+}
+.css-v8nz9h-MuiButtonBase-root-MuiMenuItem-root.Mui-selected:hover {
+  color: #1976d2 !important;
+}
+.MuiSelect-icon {
+  left: 0.5rem !important;
+  right: auto !important;
+}
+
+.MuiAutocomplete-endAdornment {
+  left: 0.5rem !important;
+  right: auto !important;
+}
+.MuiAutocomplete-hasPopupIcon.MuiAutocomplete-hasClearIcon.css-1x6bjyf-MuiAutocomplete-root
+  .MuiOutlinedInput-root {
+  padding-right: 25px !important;
+  padding-left: 48px !important;
+}
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input:-webkit-autofill {
+  direction: ltr !important;
+}
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root {
+  text-align: right !important;
+  right: 2rem !important;
+  left: none !important;
+  transform-origin: top right !important;
+  background-color: #ffffff !important;
+  width: fit-content !important ;
+  padding: 0px 5px !important;
+  font-weight: 800 !important;
+  color: #1976d2 !important;
+  font-family: "IranSans" !important;
 }

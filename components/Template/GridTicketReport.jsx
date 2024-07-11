@@ -63,6 +63,7 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
           labelKey: "columns",
           iconKey: "columns",
           toolPanel: "agColumnsToolPanel",
+          hidden: true,
         },
         {
           id: "filters",
@@ -78,13 +79,15 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
     []
   );
 
-  const defaultColDef = useMemo(() => {
+  const defaultColDef = () => {
     return {
       filter: true,
+      flex: 1,
       resizable: true,
-      minWidth: 100,
+
+      // minWidth: 100,
     };
-  }, []);
+  };
 
   useEffect(() => {
     if (loading) gridRef.current?.api?.showLoadingOverlay();
@@ -115,12 +118,6 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
     [ticketList]
   );
 
-  const autoSizeStrategy = useMemo(() => {
-    return {
-      type: "fitCellContents",
-    };
-  }, []);
-
   const handleGridReady = (params) => {
     gridApiRef.current = params.api;
     // if (loading) {
@@ -129,7 +126,19 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
     //   params.api.hideOverlay();
     // }
   };
-
+  const customColumnDefs = () => {
+    return columnDefs.map((colDef) => {
+      if (colDef.field === "service.id") {
+        return {
+          ...colDef,
+          filterParams: {
+            tabs: ["filter"], // نمایش فقط تب فیلتر
+          },
+        };
+      }
+      return colDef;
+    });
+  };
   const handleClearFilters = () => {
     if (gridApiRef.current) {
       gridApiRef.current.setFilterModel(null);
@@ -143,6 +152,9 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
       return null;
     },
   };
+  const autoSizeStrategy = () => {
+    // gridRef.current.api.sizeColumnsToFit();
+  };
 
   return (
     <div style={containerStyle} className="rtlContainer">
@@ -152,9 +164,10 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
           rowData={customTicketList}
-          domLayout="rtl"
+          headerHeight={30}
+          // domLayout="rtl"
           sideBar={sideBar}
-          enableRtl={true}
+          enableRtl
           localeText={localeText}
           pinnedBottomRowData={pinedRow}
           onFilterChanged={filterChangeHandler}

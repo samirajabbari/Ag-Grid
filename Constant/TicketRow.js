@@ -1,10 +1,13 @@
 import convertMiladiToShamsi from "../utiles/MiladitoPersian";
+
+import GenderIconRenderer from "./GenderIconRenderer";
 export const saleResourceRenderer = (params) => {
   if (params?.data?.saleResource === "internal") {
     return "داخلی";
   }
   return params?.data?.saleResource;
 };
+
 export const dateTimeRenderer = (param) => {
   const shamsiData = convertMiladiToShamsi(param.value, "D");
   return shamsiData;
@@ -14,6 +17,9 @@ const columnDefs = [
     headerName: "نام شرکت",
     field: "service.company.name",
     filter: "agSetColumnFilter",
+    filterParams: {
+      tabs: ["filter"],
+    },
   },
   {
     headerName: "شماره سرویس",
@@ -23,15 +29,17 @@ const columnDefs = [
   {
     headerName: "مبدا سرویس",
     field: "service.boardingPoint.city.name",
+    filter: "agTextColumnFilter",
   },
   {
     headerName: "مقصد نهایی سرویس",
     field: "service.finalDestination.city.name",
+    filter: "agTextColumnFilter",
   },
   {
     headerName: "شناسه بلیط",
     field: "id",
-    filter: "agNumberColumnFilter",
+    filter: "agTextColumnFilter",
   },
   {
     headerName: "شماره داخلی",
@@ -50,7 +58,7 @@ const columnDefs = [
   {
     headerName: "متد فروش",
     field: "saleResource",
-    valueFormatter: saleResourceRenderer,
+    valueGetter: saleResourceRenderer,
   },
   {
     headerName: "مبدا",
@@ -66,7 +74,7 @@ const columnDefs = [
     filter: "agTextColumnFilter",
     valueGetter: (param) => {
       if (param.data.departureDateTime)
-        return convertMiladiToShamsi(param.data.departureDateTime, "D");
+        return convertMiladiToShamsi(param.data.departureDateTime, "DT");
     },
   },
   {
@@ -89,13 +97,14 @@ const columnDefs = [
 
   {
     headerName: "قیمت کل",
-    filter: "agTextColumnFilter",
+    filter: "agNumberColumnFilter",
     field: "AllPrice",
     valueFormatter: (params) =>
       `${params?.value?.toLocaleString("fa-IR")} ریال`,
   },
   {
     headerName: "کل کارمزد داخلی",
+    filter: "agNumberColumnFilter",
     field: "totalInternalWage",
     valueFormatter: (params) => {
       if (!params.value) return "-";
@@ -105,6 +114,7 @@ const columnDefs = [
   },
   {
     headerName: "کامزد انلاین",
+    filter: "agNumberColumnFilter",
     field: "",
     valueFormatter: (params) => {
       if (!params.value) return "-";
@@ -115,6 +125,8 @@ const columnDefs = [
   {
     headerName: "کارمز پوز",
     field: "totalpcPosWageAmount",
+    filter: "agNumberColumnFilter",
+
     valueFormatter: (params) => {
       if (!params.value) return "-";
 
@@ -124,14 +136,17 @@ const columnDefs = [
   {
     headerName: "نام مسافر",
     field: "contact.fullName",
+    filter: "agTextColumnFilter",
   },
   {
     headerName: "کد ملی",
     field: "contact.nationalCode",
+    filter: "agTextColumnFilter",
   },
   {
     headerName: "شماره موبایل",
     field: "contact.mobileNumber",
+    filter: "agTextColumnFilter",
   },
   {
     headerName: "جنسیت",
@@ -141,33 +156,47 @@ const columnDefs = [
       }
       return data?.contact?.gender === "male" ? "مرد" : "زن";
     },
+    cellRenderer: GenderIconRenderer,
   },
   {
     headerName: "کاربر صادر کننده",
     field: "issuer.userName",
+    filter: "agTextColumnFilter",
   },
   {
-    headerName: "تاریخ و ساعت صدور",
+    headerName: "تاریخ صدور",
     field: "issuer.dateTime",
     filter: "agTextColumnFilter",
     valueGetter: (params) => {
       if (!params?.data?.issuer?.dateTime) {
         return "";
       }
-      return convertMiladiToShamsi(params?.data?.issuer?.dateTime, "DT");
+      return convertMiladiToShamsi(params?.data?.issuer?.dateTime, "D");
+    },
+  },
+  {
+    headerName: "ساعت صدور",
+    field: "issuer.dateTime",
+    filter: "agTextColumnFilter",
+    valueGetter: (params) => {
+      if (!params?.data?.issuer?.dateTime) {
+        return "";
+      }
+      return convertMiladiToShamsi(params?.data?.issuer?.dateTime, "T");
     },
   },
   {
     headerName: "صندوقدار",
     field: "cashier.userName",
+    filter: "agTextColumnFilter",
   },
   {
     headerName: "نحوه پرداخت",
     field: "cashier.paymentMethode",
-    valueFormatter: ({ data }) =>
-      data?.cashier?.paymentMethode === "cash"
-        ? "نقدی"
-        : data?.cashier?.paymentMethode,
+    valueGetter: ({ data }) => {
+      if (data?.cashier?.paymentMethode === undefined) return "";
+      return data?.cashier.paymentMethode === "cash" ? "نقدی" : "پوز";
+    },
   },
   {
     headerName: "افزوده شده در پایش",
@@ -176,10 +205,17 @@ const columnDefs = [
       if (data.isAddedOnGateway === undefined) return "";
       return data.isAddedOnGateway ? "بله" : "خیر";
     },
+    cellStyle: (params) => {
+      if (params.value === "خیر") {
+        return { color: "red" };
+      }
+      return { color: "green" };
+    },
   },
   {
     headerName: "کاربر اضافه کننده به صورت",
     field: "addedOnStatment.userName",
+    filter: "agTextColumnFilter",
   },
   {
     headerName: "تاریخ و ساعت افزوده شده به صورت",
@@ -193,10 +229,12 @@ const columnDefs = [
         headerName: "استرداد کننده",
         field: "refundedTicket.refunder.userName",
         columnGroupShow: "close",
+        filter: "agTextColumnFilter",
       },
       {
         headerName: "صندوقدار",
         field: "refundedTicket.cashier.userName",
+        filter: "agTextColumnFilter",
         columnGroupShow: "close",
       },
       {
@@ -214,6 +252,7 @@ const columnDefs = [
         headerName: "مبلغ جریمه",
         field: "refundedTicket.refundPenaltyAmount",
         filter: "agNumberColumnFilter",
+        columnGroupShow: "close",
         valueFormatter: ({ data }) => {
           if (data?.refundedTicket?.refundPenaltyAmount) {
             return `${data?.refundedTicket?.refundPenaltyAmount.toLocaleString(
@@ -223,7 +262,6 @@ const columnDefs = [
             return "-";
           }
         },
-        columnGroupShow: "open",
       },
       {
         headerName: "درصد جریمه",
@@ -249,6 +287,8 @@ const columnDefs = [
       {
         headerName: "مبلغ قابل استرداد",
         field: "refundedTicket.totalAmount",
+        columnGroupShow: "close",
+
         filter: "agNumberColumnFilter",
         valueFormatter: ({ data }) => {
           if (data?.refundedTicket?.totalAmount) {
@@ -259,11 +299,11 @@ const columnDefs = [
             return "-";
           }
         },
-        columnGroupShow: "open",
       },
       {
         headerName: "توضیحات",
         field: "refundedTicket.comment",
+        filter: "agTextColumnFilter",
         columnGroupShow: "open",
       },
     ],

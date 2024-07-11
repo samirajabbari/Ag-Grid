@@ -146,3 +146,9 @@ a {
   color: #1976d2 !important;
   font-family: "IranSans" !important;
 }
+.MuiTooltip-popper[data-popper-placement*="bottom"]
+  .css-ja5taz-MuiTooltip-tooltip {
+  font-family: "IranSans" !important;
+  font-weight: 600;
+  background-color: #562631 !important;
+}

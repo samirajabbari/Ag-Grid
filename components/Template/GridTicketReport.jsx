@@ -32,7 +32,7 @@ ModuleRegistry.registerModules([
 
 function GridTicketReport({ ticketList, setLoading, loading }) {
   const [pinedRow, setPinnedRow] = useState();
-  const gridApiRef = useRef(null);
+  // const gridApiRef = useRef(null);
   const gridRef = useRef(null); // رفرنس گرید
 
   const [customTicketList, setCustomTicketList] = useState([]);
@@ -79,18 +79,18 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
     []
   );
 
-  const defaultColDef = () => {
-    return {
+  const defaultColDef =  {
       filter: true,
-      flex: 1,
+      menuTabs: ["filterMenuTab", "generalMenuTab"],
       resizable: true,
-
       // minWidth: 100,
-    };
   };
 
   useEffect(() => {
-    if (loading) gridRef.current?.api?.showLoadingOverlay();
+    if (loading) {
+      gridRef.current?.columnApi?.autoSizeAllColumns();
+      gridRef.current?.api?.showLoadingOverlay();
+    }
   }, [loading]);
 
   useEffect(() => {
@@ -119,12 +119,8 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
   );
 
   const handleGridReady = (params) => {
-    gridApiRef.current = params.api;
-    // if (loading) {
-    //   params.api.showLoadingOverlay();
-    // } else {
-    //   params.api.hideOverlay();
-    // }
+    gridRef.current = params;
+    params.columnApi?.autoSizeAllColumns();
   };
   const customColumnDefs = () => {
     return columnDefs.map((colDef) => {
@@ -140,8 +136,9 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
     });
   };
   const handleClearFilters = () => {
-    if (gridApiRef.current) {
-      gridApiRef.current.setFilterModel(null);
+    console.log(gridRef);
+    if (gridRef.current) {
+      gridRef.current.api?.setFilterModel(null);
     }
   };
   const gridOptions = {
@@ -152,9 +149,11 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
       return null;
     },
   };
-  const autoSizeStrategy = () => {
-    // gridRef.current.api.sizeColumnsToFit();
-  };
+  // const autoSizeStrategy = () => {
+  //   gridRef.current.api.sizeColumnsToFit();
+  // };
+
+  const autoSizeStrategy = { type: "fitCellContents" };
 
   return (
     <div style={containerStyle} className="rtlContainer">
@@ -164,7 +163,7 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
           rowData={customTicketList}
-          headerHeight={30}
+          // headerHeight={30}
           // domLayout="rtl"
           sideBar={sideBar}
           enableRtl
@@ -174,6 +173,8 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
           autoSizeStrategy={autoSizeStrategy}
           onGridReady={handleGridReady}
           gridOptions={gridOptions}
+          suppressColumnVirtualisation
+          suppressMenuHide
           loadingOverlayComponent={() => <CustomLoadingOverlay />}
           // noRowsOverlayComponent={loading ? customTicketList : NoRowsOverlay}
         />

@@ -16,6 +16,7 @@ import OtherHousesIcon from "@mui/icons-material/OtherHouses";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LockIcon from "@mui/icons-material/Lock";
+import PasswordModal from "../Modules/Modal";
 const typoStyle = { fontFamily: "IranSans", fontWeight: 600 };
 
 const stackStyle = {
@@ -66,9 +67,9 @@ function Header() {
             pr: 3,
           }}
         >
-          <Tooltip title="Home">
+          <Tooltip title="برگشت به خانه">
             <IconButton onClick={homeHandler}>
-              <OtherHousesIcon />
+              <OtherHousesIcon sx={{ color: "#d2bc19 " }} />
             </IconButton>
           </Tooltip>
         </Box>
@@ -108,9 +109,9 @@ function Header() {
           </Menu>
           <Divider orientation="vertical" flexItem />
 
-          <Tooltip title="LogOut">
+          <Tooltip title="خروج">
             <IconButton aria-label="power settings" onClick={logOutHandler}>
-              <PowerSettingsNewIcon />
+              <PowerSettingsNewIcon sx={{ color: "#b126b2" }} />
             </IconButton>
           </Tooltip>
         </Box>

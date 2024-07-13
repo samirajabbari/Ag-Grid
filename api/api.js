@@ -1,5 +1,4 @@
 import axios from "axios";
-import { decodeToken } from "../utiles/DeCodeToken";
 
 const Api = axios.create({
   baseURL: import.meta.env.VITE_BASE_URI,
@@ -12,8 +11,7 @@ Api.interceptors.request.use(
   (config) => {
     const token = sessionStorage.getItem("mainToken");
     if (token) {
-      // const decodedToken = decodeToken(token);
-      // config.headers["X-User-Info"] = JSON.stringify(decodedToken);
+
       config.headers.Authorization = `Bearer ${token}`;
     } else {
       console.warn("Token not found in sessionStorage");

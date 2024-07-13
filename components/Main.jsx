@@ -40,7 +40,7 @@ function Main() {
         });
         setServer(res.data);
       } catch (error) {
-        console.error("Error fetching companies:", error);
+        console.error("Error fetching serverLisd:", error);
       }
     };
 

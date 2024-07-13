@@ -33,62 +33,52 @@ ModuleRegistry.registerModules([
 function GridTicketReport({ ticketList, setLoading, loading }) {
   const [pinedRow, setPinnedRow] = useState();
   // const gridApiRef = useRef(null);
-  const gridRef = useRef(null); // رفرنس گرید
+  const gridRef = useRef(null);
 
   const [customTicketList, setCustomTicketList] = useState([]);
-  const containerStyle = useMemo(
-    () => ({
-      width: "100%",
-      height: "100%",
-    }),
-    []
-  );
-  const gridStyle = useMemo(
-    () => ({
-      height: "100%",
-      width: "100%",
-      borderRadius: "8px",
-      boxShadow:
-        "0px 10px 15px -3px rgba(0,0,0,0.1),0px 10px 15px -3px rgba(0,0,0,0.1)",
-    }),
-    []
-  );
+  const containerStyle = {
+    width: "100%",
+    height: "100%",
+  };
+  const gridStyle = {
+    height: "100%",
+    width: "100%",
+    borderRadius: "8px",
+    boxShadow:
+      "0px 10px 15px -3px rgba(0,0,0,0.1),0px 10px 15px -3px rgba(0,0,0,0.1)",
+  };
 
-  const sideBar = useMemo(
-    () => ({
-      toolPanels: [
-        {
-          id: "columns",
-          labelDefault: "Columns",
-          labelKey: "columns",
-          iconKey: "columns",
-          toolPanel: "agColumnsToolPanel",
-          hidden: true,
-        },
-        {
-          id: "filters",
-          labelDefault: "Filters",
-          labelKey: "filters",
-          iconKey: "filter",
-          toolPanel: "agFiltersToolPanel",
-        },
-      ],
-      defaultToolPanel: "filters",
-      position: "left",
-    }),
-    []
-  );
+  const sideBar = {
+    toolPanels: [
+      {
+        id: "columns",
+        labelDefault: "Columns",
+        labelKey: "columns",
+        iconKey: "columns",
+        toolPanel: "agColumnsToolPanel",
+        hidden: true,
+      },
+      {
+        id: "filters",
+        labelDefault: "Filters",
+        labelKey: "filters",
+        iconKey: "filter",
+        toolPanel: "agFiltersToolPanel",
+      },
+    ],
+    defaultToolPanel: "filters",
+    position: "left",
+  };
 
-  const defaultColDef =  {
-      filter: true,
-      menuTabs: ["filterMenuTab", "generalMenuTab"],
-      resizable: true,
-      // minWidth: 100,
+  const defaultColDef = {
+    filter: true,
+    menuTabs: ["filterMenuTab", "generalMenuTab"],
+    resizable: true,
   };
 
   useEffect(() => {
     if (loading) {
-      gridRef.current?.columnApi?.autoSizeAllColumns();
+      // gridRef.current?.columnApi?.autoSizeAllColumns();
       gridRef.current?.api?.showLoadingOverlay();
     }
   }, [loading]);
@@ -107,36 +97,20 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
     setPinnedRow(pinnedList);
   }, [ticketList]);
 
-  const filterChangeHandler = useCallback(
-    (params) => {
-      const filteredData = params.api
-        .getModel()
-        .rowsToDisplay.map((rowNode) => rowNode.data);
-      const pinnedList = pinnedbuttonRow(filteredData);
-      setPinnedRow(pinnedList);
-    },
-    [ticketList]
-  );
+  const filterChangeHandler = (params) => {
+    const filteredData = params.api
+      .getModel()
+      .rowsToDisplay.map((rowNode) => rowNode.data);
+    const pinnedList = pinnedbuttonRow(filteredData);
+    setPinnedRow(pinnedList);
+  };
 
   const handleGridReady = (params) => {
     gridRef.current = params;
     params.columnApi?.autoSizeAllColumns();
   };
-  const customColumnDefs = () => {
-    return columnDefs.map((colDef) => {
-      if (colDef.field === "service.id") {
-        return {
-          ...colDef,
-          filterParams: {
-            tabs: ["filter"], // نمایش فقط تب فیلتر
-          },
-        };
-      }
-      return colDef;
-    });
-  };
+
   const handleClearFilters = () => {
-    console.log(gridRef);
     if (gridRef.current) {
       gridRef.current.api?.setFilterModel(null);
     }
@@ -149,9 +123,6 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
       return null;
     },
   };
-  // const autoSizeStrategy = () => {
-  //   gridRef.current.api.sizeColumnsToFit();
-  // };
 
   const autoSizeStrategy = { type: "fitCellContents" };
 
@@ -163,18 +134,18 @@ function GridTicketReport({ ticketList, setLoading, loading }) {
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
           rowData={customTicketList}
-          // headerHeight={30}
+          headerHeight={30}
           // domLayout="rtl"
           sideBar={sideBar}
           enableRtl
           localeText={localeText}
           pinnedBottomRowData={pinedRow}
           onFilterChanged={filterChangeHandler}
-          autoSizeStrategy={autoSizeStrategy}
+          autoSizeStrategy={autoSizeStrategy} //grid column size
           onGridReady={handleGridReady}
           gridOptions={gridOptions}
-          suppressColumnVirtualisation
-          suppressMenuHide
+          suppressColumnVirtualisation //grid column size
+          suppressMenuHide //filter menu show
           loadingOverlayComponent={() => <CustomLoadingOverlay />}
           // noRowsOverlayComponent={loading ? customTicketList : NoRowsOverlay}
         />

@@ -11,7 +11,7 @@ const convertDate = (jalaliDate) => {
   moment.loadPersian({ dialect: 'persian-modern', useGregorianParser: true });
 
   // تبدیل تاریخ شمسی به میلادی و فرمت کردن آن
-  const gregorianDate = moment(jalaliDate, 'jYYYY/jMM/jDD').format('YYYY/MM/DD');
+  const gregorianDate = moment(jalaliDate, 'jYYYY/jMM/jDD').format('YYYY-MM-DD');
   return gregorianDate;
 };
 

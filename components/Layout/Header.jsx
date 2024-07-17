@@ -16,7 +16,7 @@ import OtherHousesIcon from "@mui/icons-material/OtherHouses";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LockIcon from "@mui/icons-material/Lock";
-import PasswordModal from "../Modules/Modal";
+import PasswordModal from "../Modules/PasswordModal";
 const typoStyle = { fontFamily: "IranSans", fontWeight: 600 };
 
 const stackStyle = {

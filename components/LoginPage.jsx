@@ -9,18 +9,22 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import Api from "../api/api";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { TokenContext } from "../src/App";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import toast from "react-hot-toast";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { useMutation } from "@tanstack/react-query";
+import { fetchToken } from "../api/fetchData";
+
 const inputStyle = {
   marginBottom: "1rem",
   fontFamily: "IranSans",
   fontSize: "1rem",
 };
+
 const typoStyle = {
   margin: "2rem 0px",
   fontWeight: "700",
@@ -37,44 +41,40 @@ const boxStyle = {
 };
 
 function LoginPage() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const navigate = useNavigate();
-  const { token, setToken } = useContext(TokenContext);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const { setToken } = useContext(TokenContext);
   const [showPassword, setShowPassword] = useState(false);
 
-  const usernameHandler = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const passwordHandler = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const checkHandler = async () => {
-    try {
-      if (!username || !password) {
-        alert("لطفا فیلدهای نام کاربری و رمز عبور را پر کنید.");
-        return;
-      }
-
-      const response = await Api.post("/Token", {
-        UserName: username,
-        Password: password,
-      });
-
-      const mainToken = response.data.token;
+  const mutation = useMutation({
+    mutationFn: fetchToken,
+    onSuccess: (mainToken) => {
       sessionStorage.setItem("mainToken", mainToken);
       setToken(mainToken);
       navigate("/main");
-    } catch (error) {
+    },
+    onError: (error) => {
       console.error("خطا در ورود:", error.message);
       toast.error("ورود ناموفق. لطفا مجددا تلاش کنید.");
-    }
-  };
+    },
+  });
+
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  const onSubmit = (data) => {
+    if (!data.username || !data.password) {
+      toast.error("لطفا فیلدهای نام کاربری و رمز عبور را پر کنید.");
+      return;
+    }
+    mutation.mutate(data);
+  };
+
   return (
     <Container
       maxWidth={false}
@@ -99,53 +99,65 @@ function LoginPage() {
             backgroundColor: "#f8f8ff",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
+          <form
+            style={{
               width: "100%",
               maxWidth: "400px",
             }}
+            onSubmit={handleSubmit(onSubmit)}
           >
-            <Box sx={boxStyle}>
-              <Avatar sx={{ bgcolor: "#9c27b0" }}>
-                <LockOutlinedIcon />
-              </Avatar>
-              <Typography variant="h5" sx={typoStyle}>
-                ورود به صفحه کاربری
-              </Typography>
-            </Box>
-            <TextField
-              placeholder="نام کاربری"
-              sx={inputStyle}
-              onChange={usernameHandler}
-            />
-            <TextField
-              placeholder="رمز عبور"
-              type={showPassword ? "text" : "password"}
-              sx={inputStyle}
-              onChange={passwordHandler}
-              InputProps={{
-                endAdornment: (
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                ),
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                width: "100%",
+                maxWidth: "400px",
               }}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={checkHandler}
-              sx={inputStyle}
             >
-              ورود به پنل کاربری
-            </Button>
-          </Box>
+              <Box sx={boxStyle}>
+                <Avatar sx={{ bgcolor: "#9c27b0" }}>
+                  <LockOutlinedIcon />
+                </Avatar>
+                <Typography variant="h5" sx={typoStyle}>
+                  ورود به صفحه کاربری
+                </Typography>
+              </Box>
+              <TextField
+                placeholder="نام کاربری"
+                sx={inputStyle}
+                {...register("username", { required: true })}
+                error={!!errors.username}
+                helperText={errors.username ? "این فیلد الزامی است" : ""}
+              />
+              <TextField
+                placeholder="رمز عبور"
+                type={showPassword ? "text" : "password"}
+                sx={inputStyle}
+                {...register("password", { required: true })}
+                error={!!errors.password}
+                helperText={errors.password ? "این فیلد الزامی است" : ""}
+                InputProps={{
+                  endAdornment: (
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  ),
+                }}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                sx={inputStyle}
+                type="submit"
+              >
+                ورود به پنل کاربری
+              </Button>
+            </Box>
+          </form>
         </Grid>
         <Grid
           item

@@ -8,6 +8,8 @@ import { Avatar, Card, CardHeader, Typography } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import PageviewIcon from "@mui/icons-material/Assignment";
 import ChartPanel from "./Modules/ChartPanel";
+import { useQuery } from "@tanstack/react-query";
+import { getServerList } from "../api/fetchData";
 const typoStyle = { fontFamily: "IranSans", fontWeight: 600 };
 
 const cardStyle = {
@@ -24,28 +26,19 @@ function Main() {
     const user = decodeToken(token);
     setName(user.userName);
   }, []);
-
   const { server, setServer } = useContext(serverContext);
-
+  const decodedToken = decodeToken(token);
+  const covertToNumberArayy = decodedToken.allowedServers.map(Number);
+  const { data } = useQuery({
+    queryKey: ["GetServerList", covertToNumberArayy],
+    queryFn: getServerList,
+  });
   useEffect(() => {
-    const decodedToken = decodeToken(token);
-    const covertToNumberArayy = decodedToken.allowedServers.map(Number);
+    if (data) {
+      setServer(data);
+    }
+  }, [data]);
 
-    const fetchServers = async () => {
-      try {
-        const res = await Api.get("/api/v1.0-rc/servers", {
-          params: {
-            idArray: `[${covertToNumberArayy}]`,
-          },
-        });
-        setServer(res.data);
-      } catch (error) {
-        console.error("Error fetching serverLisd:", error);
-      }
-    };
-
-    fetchServers();
-  }, []);
   return (
     <div className={styles.container}>
       <div className={styles.top}>

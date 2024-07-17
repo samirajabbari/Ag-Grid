@@ -32,7 +32,6 @@ ModuleRegistry.registerModules([
 
 function GridTicketReport({ ticketList, setLoading, loading }) {
   const [pinedRow, setPinnedRow] = useState();
-  // const gridApiRef = useRef(null);
   const gridRef = useRef(null);
 
   const [customTicketList, setCustomTicketList] = useState([]);

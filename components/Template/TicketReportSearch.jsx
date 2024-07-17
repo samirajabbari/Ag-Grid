@@ -2,35 +2,38 @@ import React, { useContext, useEffect, useState } from "react";
 import { serverContext } from "../../src/App";
 import componiesList from "../../utiles/companiesList";
 import convertData from "../../utiles/convertDate";
-import Api from "../../api/api";
 import validateDateRange from "../../utiles/validateDate";
 import TicketReportSarchTem from "./TicketReportSarchTem";
 import convertMiladiToShamsi from "../../utiles/MiladitoPersian";
 import persianDate from "persian-date";
+import { useQuery } from "@tanstack/react-query";
+import { getTicketReport } from "../../api/fetchData";
+import toast from "react-hot-toast";
 
 function TicketReportSearch({ setTicketList, setLoading, setToggel }) {
-  const [selectedCompany, setSelectedCompany] = useState([]);
-  const [selectedServer, setSelectedServer] = useState("");
   const { server } = useContext(serverContext);
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
+
   const [error, setError] = useState(false);
-
-  const serverHandler = (e) => {
-    setSelectedCompany([]); // در هر تغییر سرور لیست شرکت ها خالی بشه
-    setSelectedServer(e.target.value);
-  };
-
-  const copmanyHandler = (e) => {
-    if (e.target && e.target.value) {
-      setSelectedCompany(e.target.value);
-    }
-  };
-
-  useEffect(() => {
-    setSelectedServer(server[1].id);
-  }, []);
-
+  const [searchData, setSearchData] = useState({
+    serverId: server ? (server[1] ? server[1].id : server[0].id) : "",
+    componies: "",
+    startDate: "",
+    endDate: "",
+  });
+  const [fetchData, setFetchData] = useState();
+  const [isSearchEnabled, setIsSearchEnabled] = useState(false);
+  const {
+    data,
+    isFetching,
+    error: queryError,
+    refetch,
+  } = useQuery({
+    queryKey: ["getTicketReport", fetchData],
+    queryFn: getTicketReport,
+    enabled: isSearchEnabled,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
   useEffect(() => {
     const persianDateInstance = new persianDate();
     persianDateInstance.toCalendar("persian");
@@ -40,15 +43,23 @@ function TicketReportSearch({ setTicketList, setLoading, setToggel }) {
       "D"
     );
     const today = convertMiladiToShamsi(persianDateInstance.State.gDate, "D");
+    setSearchData({
+      ...searchData,
+      startDate: FisrtDayOfMounth,
+      endDate: today,
+    });
+  }, [server]);
 
-    setStartDate(FisrtDayOfMounth);
-    setEndDate(today);
-  }, []);
+  const componies = componiesList(server, searchData?.serverId);
 
-  const componies = componiesList(server, selectedServer);
+  const searchHandler = () => {
+    setTicketList([]);
 
-  const searchHandler = async () => {
-    const validateDate = validateDateRange(startDate, endDate);
+    setLoading(isFetching);
+    const validateDate = validateDateRange(
+      searchData.startDate,
+      searchData.endDate
+    );
     if (!validateDate) {
       setError(true);
       return;
@@ -56,52 +67,53 @@ function TicketReportSearch({ setTicketList, setLoading, setToggel }) {
       setError(false);
     }
 
-    let companiesToSend = selectedCompany.length
-      ? selectedCompany
+    let companiesToSend = searchData?.componies?.length
+      ? searchData.componies
       : componies.map((company) => company.code);
 
-    setLoading(true);
+    const sDate = convertData(searchData.startDate);
+    const eDate = convertData(searchData.endDate);
 
-    const sDate = convertData(startDate);
-    const eDate = convertData(endDate);
-    setTicketList([]); // خالی کردن لیست در هر جستجو
-    try {
-      const res = await Api.get("/api/v1.0-rc/reports/tickets", {
-        params: {
-          serverId: selectedServer,
-          startDepartureDate: `${sDate}`,
-          endDepartureDate: `${eDate}`,
-          companyCodesArray: `[${companiesToSend}]`,
-        },
-      });
-      setTicketList(res.data);
-    } catch (error) {
-      setLoading(false);
-      setTicketList([]);
-      console.error("Error fetching tickets:", error);
-      if (error.request.status === 404) {
-        console.log("اطلاعاتی در بازه انتخابی پیدا نشد");
-      }
-    } finally {
-      setLoading(false); // اطمینان از اجرای این خط بعد از try و catch
-    }
+    setFetchData({
+      serverId: searchData.serverId,
+      startDate: sDate,
+      endDate: eDate,
+      companies: companiesToSend,
+    });
+
+    setIsSearchEnabled(true);
+    setLoading(true);
+    refetch();
   };
+
+  useEffect(() => {
+    if (!isFetching) {
+      setTicketList(data);
+      setLoading(false);
+      setIsSearchEnabled(false);
+    }
+  }, [isFetching]);
+
+  useEffect(() => {
+    if (queryError) {
+      console.log(queryError);
+      if (queryError.response.status === 404) {
+        toast.error("اطلاعاتی در بازه انتخابی یافت نشد");
+      }
+      // setLoading(false);
+      setTicketList([]);
+      setIsSearchEnabled(false);
+    }
+  }, [queryError, setLoading, setTicketList]);
 
   return (
     <TicketReportSarchTem
-      selectedServer={selectedServer}
-      serverHandler={serverHandler}
-      setSelectedServer={setSelectedServer}
-      selectedCompany={selectedCompany}
-      copmanyHandler={copmanyHandler}
-      setEndDate={setEndDate}
-      setStartDate={setStartDate}
       searchHandler={searchHandler}
-      server={server}
-      componies={componies}
-      startDate={startDate}
-      endDate={endDate}
       error={error}
+      searchData={searchData}
+      setSearchData={setSearchData}
+      componies={componies}
+      server={server}
     />
   );
 }

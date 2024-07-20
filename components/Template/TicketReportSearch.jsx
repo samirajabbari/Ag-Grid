@@ -10,7 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getTicketReport } from "../../api/fetchData";
 import toast from "react-hot-toast";
 
-function TicketReportSearch({ setTicketList, setLoading, setToggel }) {
+function TicketReportSearch({ setTicketList, setLoading, toggel }) {
   const { server } = useContext(serverContext);
 
   const [error, setError] = useState(false);
@@ -34,6 +34,7 @@ function TicketReportSearch({ setTicketList, setLoading, setToggel }) {
     retry: 1,
     refetchOnWindowFocus: false,
   });
+
   useEffect(() => {
     const persianDateInstance = new persianDate();
     persianDateInstance.toCalendar("persian");
@@ -43,6 +44,7 @@ function TicketReportSearch({ setTicketList, setLoading, setToggel }) {
       "D"
     );
     const today = convertMiladiToShamsi(persianDateInstance.State.gDate, "D");
+
     setSearchData({
       ...searchData,
       startDate: FisrtDayOfMounth,
@@ -54,7 +56,7 @@ function TicketReportSearch({ setTicketList, setLoading, setToggel }) {
 
   const searchHandler = () => {
     setTicketList([]);
-
+    setIsSearchEnabled(true);
     setLoading(isFetching);
     const validateDate = validateDateRange(
       searchData.startDate,
@@ -62,11 +64,12 @@ function TicketReportSearch({ setTicketList, setLoading, setToggel }) {
     );
     if (!validateDate) {
       setError(true);
+      toast.error("بازه انتخابی نباید بیشتر از یک ماه باشد");
+      setIsSearchEnabled(false);
       return;
     } else {
       setError(false);
     }
-
     let companiesToSend = searchData?.componies?.length
       ? searchData.componies
       : componies.map((company) => company.code);
@@ -81,9 +84,8 @@ function TicketReportSearch({ setTicketList, setLoading, setToggel }) {
       companies: companiesToSend,
     });
 
-    setIsSearchEnabled(true);
     setLoading(true);
-    refetch();
+    // refetch();
   };
 
   useEffect(() => {
@@ -96,25 +98,27 @@ function TicketReportSearch({ setTicketList, setLoading, setToggel }) {
 
   useEffect(() => {
     if (queryError) {
-      console.log(queryError);
-      if (queryError.response.status === 404) {
-        toast.error("اطلاعاتی در بازه انتخابی یافت نشد");
-      }
-      // setLoading(false);
-      setTicketList([]);
       setIsSearchEnabled(false);
+
+      if (queryError?.response?.status === 404) {
+        toast.error("اطلاعاتی در بازه انتخابی یافت نشد");
+        setIsSearchEnabled(false);
+      }
+      setTicketList([]);
     }
   }, [queryError, setLoading, setTicketList]);
 
   return (
-    <TicketReportSarchTem
-      searchHandler={searchHandler}
-      error={error}
-      searchData={searchData}
-      setSearchData={setSearchData}
-      componies={componies}
-      server={server}
-    />
+    toggel && (
+      <TicketReportSarchTem
+        searchHandler={searchHandler}
+        error={error}
+        searchData={searchData}
+        setSearchData={setSearchData}
+        componies={componies}
+        server={server}
+      />
+    )
   );
 }
 

@@ -1,7 +1,7 @@
 .ticketsReport {
   display: flex;
   flex-direction: row;
-  margin: 0px 2rem;
+  margin: 0.5rem 0.5rem;
 }
 .left {
   position: relative; /* border: 2px solid #cdccca; */
@@ -10,11 +10,11 @@
   height: 85vh;
   border-radius: 1rem;
   padding: 1rem 0.5rem;
-  overflow-y: auto;
 }
+
 .right {
   width: 100vw;
-  margin-right: 0.5rem;
+  margin-right: 1rem;
 
   /* overflow-y: scroll; */
 }

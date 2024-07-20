@@ -228,14 +228,14 @@ const columnDefs = [
       {
         headerName: "استرداد کننده",
         field: "refundedTicket.refunder.userName",
-        columnGroupShow: "close",
+        columnGroupShow: "open",
         filter: "agTextColumnFilter",
       },
       {
         headerName: "صندوقدار",
         field: "refundedTicket.cashier.userName",
         filter: "agTextColumnFilter",
-        columnGroupShow: "close",
+        columnGroupShow: "open",
       },
       {
         headerName: "تاریخ و ساعت استرداد",
@@ -245,7 +245,7 @@ const columnDefs = [
           if (data?.refundedTicket?.dateTime === undefined) return "";
           return convertMiladiToShamsi(data?.refundedTicket?.dateTime, "DT");
         },
-        columnGroupShow: "close",
+        columnGroupShow: "open",
       },
 
       {

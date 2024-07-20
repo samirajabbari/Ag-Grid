@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  useRef,
-} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { AgGridReact } from "@ag-grid-community/react";
 import { ModuleRegistry } from "@ag-grid-community/core";
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
@@ -12,15 +6,12 @@ import { SideBarModule } from "@ag-grid-enterprise/side-bar";
 import { ColumnsToolPanelModule } from "@ag-grid-enterprise/column-tool-panel";
 import { SetFilterModule } from "@ag-grid-enterprise/set-filter";
 import { MenuModule } from "@ag-grid-enterprise/menu";
-
+import CustomLoadingOverlay from "../../../Template/customLoadingOverlay";
 import "@ag-grid-community/styles/ag-grid.css";
 import "@ag-grid-community/styles/ag-theme-quartz.css";
-import "./Styles/styleGrid.css";
-import columnDefs from "../../Constant/TicketRow";
-import localeText from "../../Constant/LocalText";
-import pinnedbuttonRow from "../../utiles/ticketPinnedrow";
-import CustomLoadingOverlay from "./customLoadingOverlay";
-import NoRowsOverlay from "./NoRowsOverlay";
+import "./style/gridStyle.css";
+import localeText from "../../../../Constant/LocalText";
+import { insuranceDef } from "../Constant/columnDef";
 
 ModuleRegistry.registerModules([
   ClientSideRowModelModule,
@@ -30,7 +21,7 @@ ModuleRegistry.registerModules([
   MenuModule,
 ]);
 
-function GridTicketReport({ ticketList, loading }) {
+function InsurancesGrid({ ticketList, loading }) {
   const [pinedRow, setPinnedRow] = useState();
   const gridRef = useRef(null);
 
@@ -40,7 +31,7 @@ function GridTicketReport({ ticketList, loading }) {
     height: "100%",
   };
   const gridStyle = {
-    height: "100%",
+    height: "30rem",
     width: "100%",
     borderRadius: "8px",
     boxShadow:
@@ -83,25 +74,13 @@ function GridTicketReport({ ticketList, loading }) {
   }, [loading]);
 
   useEffect(() => {
-    let List = []; //برای اینکه هردفعه روی سرچ کلیک میشه لیست گرید خالی بشه
-    if (ticketList?.tickets) {
-      List = ticketList?.tickets?.map((item) => {
-        return { ...item, AllPrice: item.pricePerOne * item.seatCounts };
-      });
-    }
     handleClearFilters();
-    setCustomTicketList(List);
-
-    const pinnedList = pinnedbuttonRow(List);
-    setPinnedRow(pinnedList);
   }, [ticketList]);
 
   const filterChangeHandler = (params) => {
     const filteredData = params.api
       .getModel()
       .rowsToDisplay.map((rowNode) => rowNode.data);
-    const pinnedList = pinnedbuttonRow(filteredData);
-    setPinnedRow(pinnedList);
   };
 
   const handleGridReady = (params) => {
@@ -114,14 +93,6 @@ function GridTicketReport({ ticketList, loading }) {
       gridRef.current.api?.setFilterModel(null);
     }
   };
-  const gridOptions = {
-    getRowClass: (params) => {
-      if (params.node.rowPinned) {
-        return "my-pinned-row";
-      }
-      return null;
-    },
-  };
 
   const autoSizeStrategy = { type: "fitCellContents" };
 
@@ -130,27 +101,24 @@ function GridTicketReport({ ticketList, loading }) {
       <div style={gridStyle} className={"ag-theme-quartz rtl-grid"}>
         <AgGridReact
           ref={gridRef}
-          columnDefs={columnDefs}
+          columnDefs={insuranceDef}
           defaultColDef={defaultColDef}
           rowData={customTicketList}
           headerHeight={30}
-          // domLayout="rtl"
           sideBar={sideBar}
           enableRtl
           localeText={localeText}
           pinnedBottomRowData={pinedRow}
           onFilterChanged={filterChangeHandler}
-          autoSizeStrategy={autoSizeStrategy} //grid column size
+          autoSizeStrategy={autoSizeStrategy}
           onGridReady={handleGridReady}
-          gridOptions={gridOptions}
-          suppressColumnVirtualisation //grid column size
-          suppressMenuHide //filter menu show
+          suppressColumnVirtualisation
+          suppressMenuHide
           loadingOverlayComponent={() => <CustomLoadingOverlay />}
-          // noRowsOverlayComponent={loading ? customTicketList : NoRowsOverlay}
         />
       </div>
     </div>
   );
 }
 
-export default GridTicketReport;
+export default InsurancesGrid;

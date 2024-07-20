@@ -25,13 +25,17 @@ export const getServerList = async ({ queryKey }) => {
   return res.data;
 };
 export const getTicketReport = async ({ queryKey }) => {
-  const res = await Api.get("/api/v1.0-rc/reports/tickets", {
-    params: {
-      serverId: queryKey[1].serverId,
-      startDepartureDate: `${queryKey[1].startDate}`,
-      endDepartureDate: `${queryKey[1].endDate}`,
-      companyCodesArray: `[${queryKey[1].companies}]`,
-    },
-  });
-  return res.data;
+  try {
+    const res = await Api.get("/api/v1.0-rc/reports/tickets", {
+      params: {
+        serverId: queryKey[1]?.serverId,
+        startDepartureDate: `${queryKey[1]?.startDate}`,
+        endDepartureDate: `${queryKey[1]?.endDate}`,
+        companyCodesArray: `[${queryKey[1]?.companies}]`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    return error
+  }
 };

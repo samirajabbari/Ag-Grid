@@ -1,0 +1,33 @@
+.dataPickerDivStyles {
+  display: flex;
+  height: 3rem;
+  align-items: center;
+  border: 1px solid #cdccca;
+  border-radius: 4px;
+  margin-top: 1rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.dataPickerDivStyles:hover {
+  border-color: #626262;
+}
+
+.dataPickerDivStyles:focus-within {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 1px #1976d2; /* اثر فوکوس بدون تغییر اندازه */
+}
+
+.datePickeButtom {
+  border: 1px solid transparent;
+  background-color: #1976d2;
+  color: white;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: smaller;
+}
+
+.datePickeButtom:hover {
+  border-color: #2196f3;
+  background-color: #2196f3;
+}

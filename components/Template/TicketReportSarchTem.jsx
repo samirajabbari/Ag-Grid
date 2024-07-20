@@ -1,25 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
-import persian from "react-date-object/calendars/persian";
-import persian_fa from "react-date-object/locales/persian_fa";
-import DatePicker from "react-multi-date-picker";
-import Icon from "react-multi-date-picker/components/icon";
-import MaskedInput from "react-text-mask";
+import { Box, MenuItem, Typography } from "@mui/material";
 import "./Styles/search.css";
 import convertMiladiToShamsi from "../../utiles/MiladitoPersian";
-import persianDate from "persian-date";
-import { useForm, Controller } from "react-hook-form"; // 1. Import useForm and Controller
+
+import { useForm } from "react-hook-form"; // 1. Import useForm and Controller
+import { Button, Select, Autocomplete, DatePicker } from "../shared";
 
 const sxStyle = {
   marginTop: "1rem",
@@ -39,23 +24,15 @@ const maskInputStyle = {
 };
 
 function TicketReportSarchTem({
-
   searchHandler,
   server,
   componies,
   error,
+  toggle,
   setSearchData,
   searchData,
 }) {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    getValues,
-    watch,
-    control,
-    formState: { errors },
-  } = useForm(); // 2. Initialize useForm
+  const { handleSubmit, setValue, control } = useForm();
 
   const startDatePickerRef = useRef(null);
   const endDatePickerRef = useRef(null);
@@ -111,288 +88,91 @@ function TicketReportSarchTem({
     }
   };
 
-  const onSubmit = (data) => {
-    setSearchData(data);
-    searchHandler();
-  };
-
   return (
-    <form
-      style={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <Box
-        sx={{
+    <>
+      <form
+        style={{
+          width: "100%",
           display: "flex",
           flexDirection: "column",
-          width: "100%",
+          alignItems: "center",
         }}
       >
-        <FormControl fullWidth sx={{ mt: 5 }}>
-          <InputLabel shrink sx={sxStyle}>
-            سرور
-          </InputLabel>
-          <Controller
-            name="serverId"
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+          }}
+        >
+          <Select
+            label={"سرور"}
+            name={"serverId"}
             control={control}
             defaultValue={searchData?.serverId}
-            render={({ field }) => (
-              <Select
-                {...field}
-                sx={sxStyle}
-                value={field.value}
-                onChange={(e) => {
-                  field.onChange(e);
-                  setSearchData((prev) => ({
-                    ...prev,
-                    componies:"",
-                    serverId: e.target.value,
-                  }));
-                }}
-              >
-                {server.map((serverItem) => (
-                  <MenuItem
-                    key={serverItem.id}
-                    value={serverItem.id}
-                    sx={sxStyle}
-                  >
-                    {serverItem.description}
-                  </MenuItem>
-                ))}
-              </Select>
-            )}
-          />
-        </FormControl>
-        <FormControl fullWidth>
-          <InputLabel shrink sx={sxStyle}>
-            شرکت ها
-          </InputLabel>
-          <Controller
-            name="componies"
+            controlStyle={{ mt: 5 }}
+            style={sxStyle}
+            onChange={(e) =>
+              setSearchData((prev) => ({
+                ...prev,
+                componies: "",
+                serverId: e.target.value,
+              }))
+            }
+          >
+            {server.map((serverItem) => (
+              <MenuItem key={serverItem.id} value={serverItem.id} sx={sxStyle}>
+                {serverItem.description}
+              </MenuItem>
+            ))}
+          </Select>
+
+          <Autocomplete
+            label={"شرکت‌ها"}
+            name={"componies"}
             control={control}
             defaultValue={searchData.componies || []}
-            render={({ field }) => (
-              <Autocomplete
-                {...field}
-                multiple
-                options={componies}
-                getOptionLabel={(option) => option.name}
-                value={componies.filter((item) =>
-                  field.value.includes(item.code)
-                )}
-                onChange={(event, newValue) => {
-                  field.onChange(newValue.map((item) => item.code));
-                  setSearchData((prev) => ({
-                    ...prev,
-                    componies: newValue.map((item) => item.code),
-                  }));
-                }}
-                renderOption={(props, option, { selected }) => (
-                  <li {...props}>
-                    <Checkbox
-                      checked={selected}
-                      color="primary"
-                      onChange={() => {}}
-                    />
-                    {option.name}
-                  </li>
-                )}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="outlined"
-                    sx={sxStyle}
-                    placeholder={field.value.length ? null : "همه"}
-                  />
-                )}
-              />
-            )}
+            style={sxStyle}
+            options={componies}
+            getOptionLabel={(option) => option?.name}
+            onChange={(e, newValue) =>
+              setSearchData((prev) => ({
+                ...prev,
+                componies: newValue.map((item) => item.code),
+              }))
+            }
           />
-        </FormControl>
-        <FormControl>
-          <Box className="dataPickerDivStyles">
-            <InputLabel shrink sx={sxStyle}>
-              از تاریخ:
-            </InputLabel>
-            <Controller
-              name="startDate"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <>
-                  <MaskedInput
-                    mask={[
-                      /\d/,
-                      /\d/,
-                      /\d/,
-                      /\d/,
-                      "/",
-                      /\d/,
-                      /\d/,
-                      "/",
-                      /\d/,
-                      /\d/,
-                    ]}
-                    placeholder="----/--/--"
-                    value={searchData.startDate}
-                    onChange={(e) => {
-                      handleMaskedInputChange(e);
-                      field.onChange(e.target.value);
-                    }}
-                    id="STARTDATE"
-                    render={(ref, props) => (
-                      <input
-                        ref={ref}
-                        {...props}
-                        style={maskInputStyle}
-                        autoComplete="off"
-                      />
-                    )}
-                    autoComplete="off"
-                  />
-                  <DatePicker
-                    ref={startDatePickerRef}
-                    value={searchData.startDate}
-                    render={<Icon />}
-                    onChange={(date) => {
-                      handleStartPickerChange(date);
-                      field.onChange(
-                        `${date.year}/${date.month
-                          .toString()
-                          .padStart(2, "0")}/${date.day
-                          .toString()
-                          .padStart(2, "0")}`
-                      );
-                    }}
-                    calendar={persian}
-                    locale={persian_fa}
-                    calendarPosition="bottom-left"
-                    mapDays={({ date }) => {
-                      let props = {};
-                      let isWeekend = date.weekDay.index === 6;
 
-                      if (isWeekend)
-                        props.className = "highlight highlight-red";
-
-                      return props;
-                    }}
-                  >
-                    <button
-                      className="datePickeButtom"
-                      onClick={() =>
-                        handleTodayDate("STARTDATE", new persianDate())
-                      }
-                    >
-                      امروز
-                    </button>
-                  </DatePicker>
-                </>
-              )}
-            />
-          </Box>
-        </FormControl>
-        <FormControl>
-          <InputLabel shrink sx={sxStyle}>
-            تا تاریخ
-          </InputLabel>
-          <Box className="dataPickerDivStyles">
-            <Controller
-              name="endDate"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <>
-                  <MaskedInput
-                    mask={[
-                      /\d/,
-                      /\d/,
-                      /\d/,
-                      /\d/,
-                      "/",
-                      /\d/,
-                      /\d/,
-                      "/",
-                      /\d/,
-                      /\d/,
-                    ]}
-                    placeholder="----/--/--"
-                    value={searchData.endDate}
-                    onChange={(e) => {
-                      handleMaskedInputChange(e);
-                      field.onChange(e.target.value);
-                    }}
-                    id="ENDDATE"
-                    render={(ref, props) => (
-                      <input
-                        ref={ref}
-                        {...props}
-                        style={maskInputStyle}
-                        autoComplete="off"
-                      />
-                    )}
-                    autoComplete="off"
-                  />
-                  <DatePicker
-                    ref={endDatePickerRef}
-                    value={searchData.endDate}
-                    render={<Icon />}
-                    onChange={(date) => {
-                      handleEndPickerChange(date);
-                      field.onChange(
-                        `${date.year}/${date.month
-                          .toString()
-                          .padStart(2, "0")}/${date.day
-                          .toString()
-                          .padStart(2, "0")}`
-                      );
-                    }}
-                    calendar={persian}
-                    locale={persian_fa}
-                    calendarPosition="bottom-left"
-                    mapDays={({ date }) => {
-                      let props = {};
-                      let isWeekend = date.weekDay.index === 6;
-
-                      if (isWeekend)
-                        props.className = "highlight highlight-red";
-
-                      return props;
-                    }}
-                  >
-                    <button
-                      className="datePickeButtom"
-                      onClick={() =>
-                        handleTodayDate("ENDDATE", new persianDate())
-                      }
-                    >
-                      امروز
-                    </button>
-                  </DatePicker>
-                </>
-              )}
-            />
-          </Box>
-        </FormControl>
-        {error && (
-          <Typography color="error" sx={sxStyle}>
-            بازه انتخابی باید بین یک ماه باشد
-          </Typography>
-        )}
-      </Box>
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{ ...sxStyle, width: "100%" }}
-        type="submit"
-      >
-        جستجو
-      </Button>
-    </form>
+          <DatePicker
+            label="از تاریخ:"
+            name="startDate"
+            control={control}
+            id="STARTDATE"
+            value={searchData.startDate}
+            handleMaskedInputChange={handleMaskedInputChange}
+            handleStartPickerChange={handleStartPickerChange}
+            handleTodayDate={handleTodayDate}
+            maskInputStyle={maskInputStyle}
+            sxStyle={sxStyle}
+            datePickerRef={startDatePickerRef}
+          />
+          <DatePicker
+            label="تا تاریخ:"
+            name="endDate"
+            control={control}
+            id="ENDDATE"
+            value={searchData.endDate}
+            handleMaskedInputChange={handleMaskedInputChange}
+            handleStartPickerChange={handleEndPickerChange}
+            handleTodayDate={handleTodayDate}
+            maskInputStyle={maskInputStyle}
+            sxStyle={sxStyle}
+            datePickerRef={endDatePickerRef}
+          />
+        </Box>
+      </form>
+      <Button style={{ ...sxStyle, width: "100%" }} onClick={searchHandler} />
+    </>
   );
 }
 

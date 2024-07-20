@@ -25,6 +25,7 @@ const stackStyle = {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
+  height: "3rem",
 };
 
 function Header() {

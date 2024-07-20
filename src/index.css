@@ -13,7 +13,7 @@
 
 body {
   margin: 0;
-  height: 100%;
+  /* height: 100%; */
   font-family: "IranSans", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -32,7 +32,8 @@ a {
 /*----------------------------------scrolBar*/
 /* width */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 8px;
+  height: 8px;
 }
 
 /* Track */
@@ -67,6 +68,9 @@ a {
   margin-left: 0.5rem;
   color: #1976d2;
 }
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 14.5px 14px !important;
+}
 .css-hfutr2-MuiSvgIcon-root-MuiSelect-icon {
   color: #1976d2 !important;
 }
@@ -78,6 +82,9 @@ a {
 }
 .MuiCardHeader-avatar svg {
   color: #ffffff !important;
+}
+.css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root {
+  height: 3rem !important;
 }
 .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
   font-family: "IranSans" !important;
@@ -111,8 +118,8 @@ a {
 }
 .css-v8nz9h-MuiButtonBase-root-MuiMenuItem-root {
   margin: 0px !important;
-  padding-top: 15px !important;
-  padding-bottom: 15px !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
 }
 .css-v8nz9h-MuiButtonBase-root-MuiMenuItem-root.Mui-selected:hover {
   color: #1976d2 !important;
@@ -120,6 +127,10 @@ a {
 .MuiSelect-icon {
   left: 0.5rem !important;
   right: auto !important;
+}
+.css-gdh49b-MuiAutocomplete-listbox .MuiAutocomplete-option {
+  padding-top: 1px !important;
+  padding-bottom: 1px !important;
 }
 
 .MuiAutocomplete-endAdornment {
@@ -151,4 +162,9 @@ a {
   font-family: "IranSans" !important;
   font-weight: 600;
   background-color: #562631 !important;
+}
+.css-14lwjor-MuiFormLabel-root-MuiInputLabel-root {
+  right: 0 !important;
+  transform-origin: top right !important;
+  font-weight: 900 !important;
 }

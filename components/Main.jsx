@@ -13,9 +13,11 @@ import { getServerList } from "../api/fetchData";
 const typoStyle = { fontFamily: "IranSans", fontWeight: 600 };
 
 const cardStyle = {
-  maxWidth: 200,
+  width: "12.5rem",
+  // maxWidth: 200,
   alignItems: "center",
   display: "flex",
+
   padding: "1rem",
   m: 1,
 };
@@ -38,7 +40,6 @@ function Main() {
       setServer(data);
     }
   }, [data]);
-
   return (
     <div className={styles.container}>
       <div className={styles.top}>
@@ -54,7 +55,7 @@ function Main() {
             <Typography sx={typoStyle}>گزارشات بلیط ها</Typography>
           </Card>
         </Link>
-        <Link to={"/main/tickets-reports"}>
+        <Link to={"/main/insurances"}>
           <Card sx={cardStyle}>
             <CardHeader
               avatar={
@@ -63,7 +64,7 @@ function Main() {
                 </Avatar>
               }
             />
-            <Typography sx={typoStyle}>گزارشات بلیط ها</Typography>
+            <Typography sx={typoStyle}>بیمه</Typography>
           </Card>
         </Link>
       </div>

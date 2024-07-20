@@ -23,9 +23,9 @@
   right: 0 !important;
 }
 .my-pinned-row {
-  background-color: #0095ff !important;
+  background-color: #1976d2;
   color: rgb(255, 255, 255);
-  border-top: 2px solid #0095ff !important;
+  border-top: 2px solid #1f6aff;
   font-size: medium;
 }
 .ag-header-group-cell-with-group {

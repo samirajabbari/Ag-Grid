@@ -5,7 +5,7 @@ import TicketReports from "./Modules/TicketReports";
 import NotFound from "./NotFound";
 import ProtectedRoute from "./ProtectedRoute";
 import Layout from "./Layout/Layout";
-
+import InsurancesReport from "./Modules/Insurances/InsurancesReport";
 function MainRoute() {
   return (
     <>
@@ -15,6 +15,7 @@ function MainRoute() {
             <Route path="" element={<Main />} />
 
             <Route path="tickets-reports" element={<TicketReports />} />
+            <Route path="insurances" element={<InsurancesReport />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </ProtectedRoute>

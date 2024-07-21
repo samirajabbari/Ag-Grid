@@ -56,7 +56,10 @@ function Header() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const ModalHandler = () => {
+    setShowModal(true);
+    setAnchorEl(null);
+  };
   return (
     <Box sx={{ m: 1 }}>
       <Stack spacing={2} direction="row" alignItems="center" sx={stackStyle}>
@@ -99,7 +102,7 @@ function Header() {
                 </Typography>
               </Box>
             </MenuItem>
-            <MenuItem onClick={() => setShowModal(true)}>
+            <MenuItem onClick={ModalHandler}>
               <Box sx={{ display: "flex" }}>
                 <LockIcon sx={{ color: "#d9a66e " }} />
                 <Typography sx={{ fontFamily: "IranSans", mr: 1 }}>

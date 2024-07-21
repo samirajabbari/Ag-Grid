@@ -5,19 +5,16 @@ import {
   Button,
   Container,
   Grid,
-  IconButton,
-  TextField,
   Typography,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { TokenContext } from "../src/App";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import toast from "react-hot-toast";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useMutation } from "@tanstack/react-query";
 import { fetchToken } from "../api/fetchData";
+import { InputText } from "./shared/Input";
 
 const inputStyle = {
   marginBottom: "1rem",
@@ -41,14 +38,10 @@ const boxStyle = {
 };
 
 function LoginPage() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const methods = useForm();
   const navigate = useNavigate();
+
   const { setToken } = useContext(TokenContext);
-  const [showPassword, setShowPassword] = useState(false);
 
   const mutation = useMutation({
     mutationFn: fetchToken,
@@ -62,10 +55,6 @@ function LoginPage() {
       toast.error("ورود ناموفق. لطفا مجددا تلاش کنید.");
     },
   });
-
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
 
   const onSubmit = (data) => {
     if (!data.username || !data.password) {
@@ -99,65 +88,60 @@ function LoginPage() {
             backgroundColor: "#f8f8ff",
           }}
         >
-          <form
-            style={{
-              width: "100%",
-              maxWidth: "400px",
-            }}
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
+          <FormProvider {...methods}>
+            <form
+              style={{
                 width: "100%",
                 maxWidth: "400px",
               }}
+              onSubmit={methods.handleSubmit(onSubmit)}
             >
-              <Box sx={boxStyle}>
-                <Avatar sx={{ bgcolor: "#9c27b0" }}>
-                  <LockOutlinedIcon />
-                </Avatar>
-                <Typography variant="h5" sx={typoStyle}>
-                  ورود به صفحه کاربری
-                </Typography>
-              </Box>
-              <TextField
-                placeholder="نام کاربری"
-                sx={inputStyle}
-                {...register("username", { required: true })}
-                error={!!errors.username}
-                helperText={errors.username ? "این فیلد الزامی است" : ""}
-              />
-              <TextField
-                placeholder="رمز عبور"
-                type={showPassword ? "text" : "password"}
-                sx={inputStyle}
-                {...register("password", { required: true })}
-                error={!!errors.password}
-                helperText={errors.password ? "این فیلد الزامی است" : ""}
-                InputProps={{
-                  endAdornment: (
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  ),
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100%",
+                  maxWidth: "400px",
                 }}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                sx={inputStyle}
-                type="submit"
               >
-                ورود به پنل کاربری
-              </Button>
-            </Box>
-          </form>
+                <Box sx={boxStyle}>
+                  <Avatar sx={{ bgcolor: "#9c27b0" }}>
+                    <LockOutlinedIcon />
+                  </Avatar>
+                  <Typography variant="h5" sx={typoStyle}>
+                    ورود به صفحه کاربری
+                  </Typography>
+                </Box>
+                <InputText
+                  disabled={false}
+                  name="username"
+                  placeholder="نام کاربری"
+                  label=""
+                  rules={{ required: "این فیلد الزامی است" }}
+                  helperText="نام کاربری را وارد نمایید"
+                  style={inputStyle}
+                />
+                <InputText
+                  disabled={false}
+                  name="password"
+                  placeholder="رمز عبور"
+                  label=""
+                  rules={{ required: "این فیلد الزامی است" }}
+                  helperText="رمز عبور را وارد نمایید"
+                  type="password"
+                  style={inputStyle}
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={inputStyle}
+                  type="submit"
+                >
+                  ورود به پنل کاربری
+                </Button>
+              </Box>
+            </form>
+          </FormProvider>
         </Grid>
         <Grid
           item

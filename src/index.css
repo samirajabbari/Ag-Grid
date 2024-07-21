@@ -86,7 +86,7 @@ a {
 .css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root {
   height: 3rem !important;
 }
-.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
+.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input  {
   font-family: "IranSans" !important;
 }
 .css-g9fo99-MuiAvatar-root svg {
@@ -99,7 +99,8 @@ a {
 /* .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
   text-align: right !important;
 } */
-.css-1uwyrp-MuiFormLabel-root-MuiInputLabel-root {
+.css-1uwyrp-MuiFormLabel-root-MuiInputLabel-root,
+.css-1pk617i-MuiFormLabel-root-MuiInputLabel-root {
   text-align: right;
   right: 2rem !important;
   left: none !important;
@@ -167,4 +168,13 @@ a {
   right: 0 !important;
   transform-origin: top right !important;
   font-weight: 900 !important;
+}
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input ::placeholder {
+  font-family: "IranSans" !important;
+}
+.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root {
+  padding-right: 15px !important;
+}
+.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input:-webkit-autofill {
+  direction: ltr !important;
 }

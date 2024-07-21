@@ -1,11 +1,12 @@
 import React from "react";
 import Header from "./Header";
+import { Box } from "@mui/material";
 
 function Layout({ children }) {
   return (
     <>
       <Header />
-      {children}
+      <Box>{children}</Box>
     </>
   );
 }

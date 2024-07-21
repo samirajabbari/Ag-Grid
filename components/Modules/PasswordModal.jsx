@@ -1,53 +1,33 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
-  Modal,
   Typography,
-  TextField,
   IconButton,
-  Button,
   Stack,
   Divider,
-  InputLabel,
   FormControl,
+  Tooltip,
 } from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
 import CloseIcon from "@mui/icons-material/Close";
 import toast from "react-hot-toast";
 import { decodeToken } from "../../utiles/DeCodeToken";
 import { TokenContext } from "../../src/App";
-import Api from "../../api/api";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { changePassword } from "../../api/fetchData";
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "white",
-  borderRadius: "8px",
-  boxShadow: 24,
-  p: 4,
+import { Modals, InputText, Button } from "../shared";
+const inputStyle = {
+  fontFamily: "IranSans",
+  fontSize: "1rem",
 };
-function PasswordModal({ setShowModal, showModal }) {
-  const { register, handleSubmit } = useForm();
+function PasswordModal({ setShowModal }) {
+  const methods = useForm();
 
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { token } = useContext(TokenContext);
-
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-  const handleClickShowConfirmPassword = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
 
   const onSuccess = () => {
     toast.success("پس ورود با موفقیت تغییر یافت");
@@ -73,103 +53,85 @@ function PasswordModal({ setShowModal, showModal }) {
     mutation.mutate(data);
   };
   return (
-    <Modal
-      open={showModal}
-      onClose={() => setShowModal(false)}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style}>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Typography
-            id="modal-modal-title"
-            variant="h6"
-            component="h6"
-            sx={{ fontFamily: "IranSans", color: "#009eff" }}
+    <Modals>
+      <Modals.Header>
+        <Box>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            pb={1}
           >
-            تغییر رمز عبور
-          </Typography>
-          <IconButton onClick={() => setShowModal(false)}>
-            <CloseIcon sx={{ color: "#009eff" }} />
-          </IconButton>
-        </Stack>
-        <Divider sx={{ mb: 2 }} />
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h6"
+              sx={{ fontFamily: "IranSans", color: "#009eff" }}
+            >
+              تغییر رمز عبور
+            </Typography>
 
-        <form style={{ width: "100%" }} onSubmit={handleSubmit(onSubmit)}>
+            <IconButton onClick={() => setShowModal(false)}>
+              <CloseIcon sx={{ color: "#9b2334" }} />
+            </IconButton>
+          </Stack>
+          <Divider sx={{ mb: 2, backgroundColor: "#1976d2" }} />
+        </Box>
+      </Modals.Header>
+      <FormProvider {...methods}>
+        <form fullWidth onSubmit={methods.handleSubmit(onSubmit)}>
           <FormControl fullWidth margin="normal">
-            <InputLabel htmlFor="username" shrink>
-              نام کاربری
-            </InputLabel>
-            <TextField disabled id="username" value={username} fullWidth />
-          </FormControl>
-
-          <FormControl fullWidth margin="normal">
-            <InputLabel htmlFor="password" shrink>
-              رمز عبور فعلی
-            </InputLabel>
-            <TextField
-              {...register("password")}
-              id="password"
-              type={showPassword ? "text" : "password"}
-              fullWidth
-              autoComplete="new-password"
-              InputProps={{
-                endAdornment: (
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                ),
-              }}
+            <InputText
+              disabled={true}
+              name="username"
+              placeholder={username}
+              label="نام کاربری"
+              rules={{}}
+              helperText=""
+              type={"text"}
             />
           </FormControl>
-
           <FormControl fullWidth margin="normal">
-            <InputLabel htmlFor="confirm-password" shrink>
-              رمز عبور جدید
-            </InputLabel>
-            <TextField
-              {...register("confirmPassword")}
-              id="confirm-password"
-              type={showConfirmPassword ? "text" : "password"}
-              fullWidth
-              InputProps={{
-                endAdornment: (
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowConfirmPassword}
-                    edge="end"
-                  >
-                    {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                ),
-              }}
+            <InputText
+              disabled={false}
+              name="password"
+              placeholder=""
+              label="رمز عبور فعلی"
+              rules={{ required: "این فیلد الزامی است" }}
+              helperText="رمز عبور فعلی را وارد کنید"
+              style={inputStyle}
+              type={"password"}
+            />
+          </FormControl>
+          <FormControl fullWidth margin="normal">
+            <InputText
+              disabled={false}
+              name="confirmPassword"
+              placeholder=""
+              label="رمز عبور جدید"
+              rules={{ required: "این فیلد الزامی است" }}
+              helperText="رمز عبور جدید را  وارد کنید"
+              type={"password"}
+              style={inputStyle}
             />
           </FormControl>
           <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            fullWidth
-            sx={{
+            style={{
+              width: "100%",
               mt: 2,
               fontFamily: "IranSans",
               height: "3rem",
               fontSize: "medium",
             }}
-          >
-            تغییر رمز عبور
-          </Button>
+            variant="contained"
+            color="primary"
+            onClick={() => onSubmit}
+            type="submit"
+            title="تغییر رمز عبور"
+          />
         </form>
-      </Box>
-    </Modal>
+      </FormProvider>
+    </Modals>
   );
 }
 

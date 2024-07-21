@@ -2,4 +2,6 @@ import { Button } from "./Button";
 import { Select } from "./Select";
 import { Autocomplete } from "./Autocomplete";
 import { DatePicker } from "./Datepicker";
-export { Button, Select, Autocomplete, DatePicker };
+import { InputText } from "./Input";
+import { Modals } from "./Modal";
+export { Button, Select, Autocomplete, DatePicker, InputText, Modals };

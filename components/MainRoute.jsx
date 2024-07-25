@@ -5,7 +5,8 @@ import TicketReports from "./Modules/TicketReports";
 import NotFound from "./NotFound";
 import ProtectedRoute from "./ProtectedRoute";
 import Layout from "./Layout/Layout";
-import InsurancesReport from "./Modules/Insurances/InsurancesReport";
+import InsurancesReport from "./Modules/Insurances/Template/InsurancesReport";
+
 function MainRoute() {
   return (
     <>

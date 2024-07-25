@@ -8,7 +8,7 @@ export const fetchToken = async (data) => {
 };
 export const changePassword = async (data) => {
   const res = await Api.post(
-    "http://192.168.1.20:8081/api/v1.0-rc/users/changePassword",
+    "/api/v1.0-rc/users/changePassword",
 
     {
       currentPassword: data.password,
@@ -36,6 +36,27 @@ export const getTicketReport = async ({ queryKey }) => {
     });
     return res.data;
   } catch (error) {
-    return error
+    return error;
   }
 };
+export const insuranceList = async ({ queryKey }) => {
+  try {
+    const res = await Api.get("api/v1.0-rc/insurances", {
+      params: {
+        serverId: `${queryKey[1].serverId}`,
+        tripTypeCode: `${queryKey[1].tripTypeCode}`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    return error;
+  }
+};
+export const deleteDetailInsurance=async(rateId,id)=>{
+  try {
+    const res=await Api.delete(`/api/v1.0-rc/insurances/${id}/rates/${rateId}`)
+    return res
+  } catch (error) {
+    return error
+  }
+}

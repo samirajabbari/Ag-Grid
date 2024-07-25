@@ -1,7 +1,5 @@
 import React, {
-  useCallback,
   useEffect,
-  useMemo,
   useState,
   useRef,
 } from "react";
@@ -93,6 +91,7 @@ function GridTicketReport({ ticketList, loading }) {
     setCustomTicketList(List);
 
     const pinnedList = pinnedbuttonRow(List);
+
     setPinnedRow(pinnedList);
   }, [ticketList]);
 

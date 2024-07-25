@@ -1,0 +1,13 @@
+.container {
+  /* position: relative; */
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem 0.5rem;
+  height: 90vh;
+}
+.bottom {
+  height: 100%;
+}
+.top {
+  height: 35%;
+}

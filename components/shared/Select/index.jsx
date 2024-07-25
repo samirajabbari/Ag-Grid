@@ -11,9 +11,10 @@ const Select = ({
   defaultValue,
   onChange,
   children,
+  variant
 }) => {
   return (
-    <FormControl fullWidth sx={controlStyle}>
+    <FormControl fullWidth sx={controlStyle} variant={variant}>
       <InputLabel shrink sx={style}>
         {label}
       </InputLabel>
@@ -48,10 +49,12 @@ Select.propTypes = {
   defaultValue: PropTypes.any,
   onChange: PropTypes.func,
   children: PropTypes.any,
+  variant:PropTypes.oneOf["standard","filled"]
 };
 
 Select.defaultProps = {
   type: "auto-complete",
+  variant:""
 };
 
 export { Select };

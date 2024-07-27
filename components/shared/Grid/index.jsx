@@ -7,6 +7,7 @@ import localeText from "./constant/LocalText";
 import CustomLoadingOverlay from "./Loader/customLoadingOverlay";
 import PropTypes from "prop-types";
 import { EnterpriseCoreModule } from "ag-grid-enterprise";
+import { AllModules } from "@ag-grid-enterprise/all-modules";
 
 function Grid({
   parentGridRef,
@@ -18,8 +19,9 @@ function Grid({
   isFetching,
   detailKey,
   groupName,
+  onFilterChange,
 }) {
-  const gridRef = useRef(null);
+  const gridRef = useRef();
 
   const containerStyle = {
     width: "100%",
@@ -60,16 +62,22 @@ function Grid({
   };
 
   useEffect(() => {
+    console.log("Grid", isFetching);
+    console.log(gridRef.current);
     if (isFetching) {
-      gridRef.current?.columnApi?.autoSizeAllColumns();
       gridRef.current?.api?.showLoadingOverlay();
+      gridRef.current?.columnApi?.autoSizeAllColumns();
     } else {
       gridRef.current?.api?.hideOverlay();
     }
   }, [isFetching]);
 
   const filterChangeHandler = (params) => {
-    // Filter change logic
+    const filteredData = params.api
+      .getModel()
+      .rowsToDisplay.map((rowNode) => rowNode.data);
+
+    onFilterChange(filteredData);
   };
 
   // const getId = () => {
@@ -77,16 +85,15 @@ function Grid({
   // }
 
   const handleGridReady = (params) => {
-    console.log("data", params);
     gridRef.current = params;
     params.columnApi?.autoSizeAllColumns();
   };
 
-  const handleClearFilters = () => {
-    if (gridRef.current) {
-      gridRef.current.api?.setFilterModel(null);
-    }
-  };
+  // const handleClearFilters = () => {
+  //   if (gridRef.current) {
+  //     gridRef.current.api?.setFilterModel(null);
+  //   }
+  // };
 
   const gridOptions = {
     getRowClass: (params) => {
@@ -96,7 +103,9 @@ function Grid({
       return null;
     },
   };
-
+  useEffect(() => {
+    console.log(gridRef.current.api);
+  }, []);
   const autoSizeStrategy = { type: "fitCellContents" };
 
   return (
@@ -135,7 +144,7 @@ function Grid({
           headerHeight={30}
           sideBar={sideBar}
           enableRtl
-          modules={[EnterpriseCoreModule]}
+          modules={AllModules}
           localeText={localeText}
           pinnedBottomRowData={pinnedBottomRowData}
           onFilterChanged={filterChangeHandler}
@@ -167,4 +176,5 @@ Grid.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   detailKey: PropTypes.string.isRequired,
   groupName: PropTypes.string,
+  onFilterChange: PropTypes.func,
 };

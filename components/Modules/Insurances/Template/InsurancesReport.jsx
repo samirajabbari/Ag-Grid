@@ -31,6 +31,8 @@ function InsurancesReport() {
     enabled: isSearchEnabled,
     retry: 1,
     refetchOnWindowFocus: false,
+    staleTime: 0,
+    cacheTime: 0,
   });
 
   useEffect(() => {

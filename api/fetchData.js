@@ -49,14 +49,16 @@ export const insuranceList = async ({ queryKey }) => {
     });
     return res.data;
   } catch (error) {
+    throw error;
+  }
+};
+export const deleteDetailInsurance = async (rateId, id) => {
+  try {
+    const res = await Api.delete(
+      `/api/v1.0-rc/insurances/${id}/rates/${rateId}`
+    );
+    return res;
+  } catch (error) {
     return error;
   }
 };
-export const deleteDetailInsurance=async(rateId,id)=>{
-  try {
-    const res=await Api.delete(`/api/v1.0-rc/insurances/${id}/rates/${rateId}`)
-    return res
-  } catch (error) {
-    return error
-  }
-}

@@ -31,9 +31,6 @@ function Tabcomponent({
     setIsSearchEnabled(true);
   };
 
-  useEffect(() => {
-  }, [searchData]);
-
   return (
     <div>
       <Select

@@ -111,6 +111,19 @@ a {
   font-weight: 800 !important;
   color: #1976d2 !important;
 }
+.css-eladsm-MuiFormLabel-root-MuiInputLabel-root {
+  text-align: right;
+  right: 1rem !important;
+  left: none !important;
+  top: -8px !important;
+  transform-origin: top right !important;
+  background-color: #ffffff !important;
+  width: fit-content !important ;
+  padding: 0px 5px !important;
+  font-weight: 800 !important;
+  color: #1976d2 !important;
+  z-index: 2;
+}
 .Mui-focused {
   color: #1976d2 !important;
 }

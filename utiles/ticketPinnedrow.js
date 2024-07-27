@@ -1,5 +1,4 @@
 const pinnedbuttonRow = (data) => {
-  // console.log("PinnedRow", data);
   const seatcount = data?.reduce((preValue, curValue) => {
     if (curValue && curValue.seatCounts) {
       return preValue + curValue.seatCounts;

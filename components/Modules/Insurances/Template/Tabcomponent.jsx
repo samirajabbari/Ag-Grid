@@ -14,9 +14,7 @@ function Tabcomponent({
   setSearchData,
   server,
   setIsSearchEnabled,
-  tripTypeCode,
   setTripTypeCode,
-  searchData,
 }) {
   const [tabSelected, settabSelected] = useState("interCity");
   const { control, setValue } = useForm();

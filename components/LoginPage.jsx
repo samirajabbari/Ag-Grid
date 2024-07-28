@@ -14,7 +14,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import toast from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
 import { fetchToken } from "../api/fetchData";
-import { InputText } from "./shared/Input";
+import { InputText } from "./shared";
 
 const inputStyle = {
   marginBottom: "1rem",

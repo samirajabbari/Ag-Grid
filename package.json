@@ -10,16 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@ag-grid-community/client-side-row-model": "^31.3.2",
-    "@ag-grid-community/core": "^31.3.4",
-    "@ag-grid-community/react": "^31.3.4",
-    "@ag-grid-community/styles": "^31.3.2",
-    "@ag-grid-enterprise/column-tool-panel": "^31.3.2",
-    "@ag-grid-enterprise/filter-tool-panel": "^31.3.2",
-    "@ag-grid-enterprise/master-detail": "^32.0.2",
-    "@ag-grid-enterprise/menu": "^31.3.2",
-    "@ag-grid-enterprise/set-filter": "^31.3.2",
-    "@ag-grid-enterprise/side-bar": "^31.3.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.21",
@@ -27,9 +17,9 @@
     "@mui/material": "^5.16.4",
     "@mui/x-charts": "^7.9.0",
     "@tanstack/react-query": "^5.51.1",
-    "ag-grid-community": "^32.0.2",
-    "ag-grid-enterprise": "^32.0.2",
-    "ag-grid-react": "^32.0.2",
+    "ag-grid-community": "^30.2.1",
+    "ag-grid-enterprise": "^30.2.1",
+    "ag-grid-react": "^30.2.1",
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
     "date-fns-jalali": "^3.6.0-1",
@@ -53,6 +43,7 @@
     "react-text-mask": "^5.5.0"
   },
   "devDependencies": {
+    "@types/node": "^20.14.12",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
@@ -60,6 +51,7 @@
     "eslint-plugin-react": "^7.34.2",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "typescript": "^5.5.4",
     "vite": "^5.3.1"
   }
 }

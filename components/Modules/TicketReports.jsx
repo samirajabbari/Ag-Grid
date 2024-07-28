@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./Styles/TicketsReports.module.css";
 import TicketReportSearch from "../Template/TicketReportSearch";
-import GridTicketReport from "../Template/GridTicketReport";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import columnDefs from "../../Constant/TicketRow";

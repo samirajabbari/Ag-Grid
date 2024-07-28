@@ -1,32 +1,40 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Box, Typography } from "@mui/material";
 import { Modals, Button } from "../../../shared";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteDetailInsurance } from "../../../../api/fetchData";
 import toast from "react-hot-toast";
 
 function DeleteIsuranceDetail({ params }) {
-  const deleteHandler = () => {};
   const [isShowModal, setIsShowModal] = useState(false);
-  // const context = useContext(params.api.gridOptionsWrapper.gridOptions.context);
+  const queryKey = "InsuranceReport";
+  const queryClient = useQueryClient();
 
-  const deletDetailHandler = () => {
-    setIsShowModal(true);
-    console.log(params);
-    console.log(context);
-    // mutate()
-  };
   const { mutate } = useMutation({
     mutationFn: deleteDetailInsurance,
     onSuccess: () => {
+      setIsShowModal(false);
       toast.success("با موفقیت حذف شد");
+      queryClient.invalidateQueries("InsuranceReport")
     },
     onError: (error) => {
+      setIsShowModal(false);
+      queryClient.invalidateQueries(queryKey);
       console.error("خطا در ورود:", error.message);
       toast.error("حذف آیتم با مشکل مواجه شد");
     },
   });
+  const deleteHandler = () => {
+    mutate({
+      parentId: params.parentId,
+      rateId: params.id,
+      serverId: params.serverId,
+    });
+  };
+  const deletDetailHandler = () => {
+    setIsShowModal(true);
+  };
   return (
     <>
       <button
@@ -74,7 +82,7 @@ function DeleteIsuranceDetail({ params }) {
                 style={{ fontFamily: "IranSans" }}
                 variant="contained"
                 color="primary"
-                onClick={() => deleteHandler}
+                onClick={deleteHandler}
                 title="بله"
                 type="primary"
               />

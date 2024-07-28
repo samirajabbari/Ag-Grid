@@ -1,15 +1,14 @@
-import React, { useEffect, useState, useRef } from "react";
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
-import "./style/styleGrid.css";
+import React, { useEffect, useRef } from "react";
 import localeText from "./constant/LocalText";
 import CustomLoadingOverlay from "./Loader/customLoadingOverlay";
 import PropTypes from "prop-types";
 import { EnterpriseCoreModule } from "ag-grid-enterprise";
-import { AllModules } from "@ag-grid-enterprise/all-modules";
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-alpine.css";
+import "./style/styleGrid.css";
 
-function Grid({
+const Grid = ({
   parentGridRef,
   columnDefs,
   pinnedBottomRowData,
@@ -18,11 +17,11 @@ function Grid({
   data,
   isFetching,
   detailKey,
+  getRowData,
   groupName,
   onFilterChange,
-}) {
-  const gridRef = useRef();
-
+}) => {
+  const gridRef = useRef(null);
   const containerStyle = {
     width: "100%",
     height: "100%",
@@ -62,11 +61,8 @@ function Grid({
   };
 
   useEffect(() => {
-    console.log("Grid", isFetching);
-    console.log(gridRef.current);
     if (isFetching) {
       gridRef.current?.api?.showLoadingOverlay();
-      gridRef.current?.columnApi?.autoSizeAllColumns();
     } else {
       gridRef.current?.api?.hideOverlay();
     }
@@ -80,20 +76,10 @@ function Grid({
     onFilterChange(filteredData);
   };
 
-  // const getId = () => {
-  //   gridRef.current.api.
-  // }
-
   const handleGridReady = (params) => {
     gridRef.current = params;
     params.columnApi?.autoSizeAllColumns();
   };
-
-  // const handleClearFilters = () => {
-  //   if (gridRef.current) {
-  //     gridRef.current.api?.setFilterModel(null);
-  //   }
-  // };
 
   const gridOptions = {
     getRowClass: (params) => {
@@ -102,19 +88,26 @@ function Grid({
       }
       return null;
     },
+    // context: { parentData: null },
   };
-  useEffect(() => {
-    console.log(gridRef.current.api);
-  }, []);
+
   const autoSizeStrategy = { type: "fitCellContents" };
+
+  const onRowGroupOpened = (params) => {
+    console.log(params);
+    if (params.node.expanded) {
+      gridRef.current?.columnApi?.autoSizeAllColumns();
+    }
+  };
 
   return (
     <div style={containerStyle} className="rtlContainer">
-      <div style={gridStyle} className={"ag-theme-quartz rtl-grid"}>
+      <div style={gridStyle} className="ag-theme-alpine rtl-grid">
         <AgGridReact
           key={JSON.stringify(data)} // Ensure grid is reset when data changes
           ref={gridRef}
           masterDetail={masterDetail}
+          onGridReady={handleGridReady}
           detailCellRendererParams={{
             detailGridOptions: {
               localeText,
@@ -122,17 +115,17 @@ function Grid({
               columnDefs: insuranceDetailDef,
               rowClass: "detail-row",
               defaultColDef: {
-                flex: 1,
+                filter: true,
+                menuTabs: ["filterMenuTab", "generalMenuTab"],
+                resizable: true,
               },
-              // context: { parentData: null },
+              context: { parentData: null },
             },
             getDetailRowData: (params) => {
-              const detailData = params.data[detailKey];
-              if (detailData) {
-                params.successCallback(detailData);
-
-                // params.api.gridOptionsWrapper.gridOptions.context.parentData =
-                //   params.data;
+              const rowData = getRowData(params);
+              // const detailData = params.data[detailKey];
+              if (rowData) {
+                params.successCallback(rowData);
               } else {
                 params.successCallback([]);
               }
@@ -144,16 +137,16 @@ function Grid({
           headerHeight={30}
           sideBar={sideBar}
           enableRtl
-          modules={AllModules}
+          modules={[EnterpriseCoreModule]}
           localeText={localeText}
           pinnedBottomRowData={pinnedBottomRowData}
           onFilterChanged={filterChangeHandler}
-          autoSizeStrategy={autoSizeStrategy} //grid column size
-          onGridReady={handleGridReady}
+          autoSizeStrategy={autoSizeStrategy} // grid column size
           gridOptions={gridOptions}
-          suppressColumnVirtualisation //grid column size
-          suppressMenuHide //filter menu show
-          loadingOverlayComponent={() => <CustomLoadingOverlay />}
+          onRowGroupOpened={onRowGroupOpened}
+          suppressColumnVirtualisation // grid column size
+          suppressMenuHide // filter menu show
+          loadingOverlayComponent={CustomLoadingOverlay}
           autoGroupColumnDef={{
             headerName: groupName,
             filter: "agGroupColumnFilter",
@@ -162,9 +155,7 @@ function Grid({
       </div>
     </div>
   );
-}
-
-export { Grid };
+};
 
 Grid.propTypes = {
   parentGridRef: PropTypes.any,
@@ -178,3 +169,5 @@ Grid.propTypes = {
   groupName: PropTypes.string,
   onFilterChange: PropTypes.func,
 };
+
+export { Grid };

@@ -12,7 +12,12 @@ function InsurancesReport() {
   const [tripTypeCode, setTripTypeCode] = useState("interCity");
   const [searchData, setSearchData] = useState();
   const [isSearchEnabled, setIsSearchEnabled] = useState(false);
+  const [expandedRowIds, setExpandedRowIds] = useState([]);
 
+  // const onRowGroupOpened = useCallback((params) => {
+  //   const expandedIds = params.api.getSelectedNodes().map(node => node.id);
+  //   setExpandedRowIds(expandedIds);
+  // }, []);
   useEffect(() => {
     if (server && server.length > 0) {
       setServerId(server[0].id);
@@ -66,6 +71,7 @@ function InsurancesReport() {
           isFetching={isFetching}
           tripTypeCode={tripTypeCode}
           detailKey="rates"
+          serverId={serverId}
         />
       </div>
     </div>

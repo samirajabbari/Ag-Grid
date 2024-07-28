@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import "@ag-grid-community/styles/ag-grid.css";
-import "@ag-grid-community/styles/ag-theme-quartz.css";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-material.css";
 
-import { Grid } from "../../../shared/Grid";
+import { Grid } from "../../../shared";
 import {
   insuranceDef,
   insuranceDetailDef,
@@ -10,8 +10,21 @@ import {
   CharterDetailDef,
   abroadDetailDef,
 } from "../Constant/columnDef";
-function InsurancesGrid({ data, isFetching, tripTypeCode, detailKey }) {
+function InsurancesGrid({
+  data,
+  isFetching,
+  tripTypeCode,
+  detailKey,
+  serverId,
+}) {
   const parentGridRef = useRef(null);
+
+  const getRowData = (params) => {
+    const data = params?.data?.rates.map((child) => {
+      return { ...child, parentId: params.data.id, serverId: serverId };
+    });
+    return data;
+  };
 
   return (
     <Grid
@@ -19,6 +32,7 @@ function InsurancesGrid({ data, isFetching, tripTypeCode, detailKey }) {
       columnDefs={
         tripTypeCode === "interCity" ? insuranceDef : charter_abroadDef
       }
+      getRowData={getRowData}
       pinnedBottomRowData={[]}
       masterDetail={true}
       insuranceDetailDef={
@@ -31,7 +45,7 @@ function InsurancesGrid({ data, isFetching, tripTypeCode, detailKey }) {
       data={data}
       isFetching={isFetching}
       groupName="نوع ماشین"
-      detailKey={detailKey}
+      // detailKey={detailKey}
     />
   );
 }

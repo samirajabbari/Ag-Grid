@@ -26,7 +26,8 @@
   background-color: #0095ff !important;
   color: rgb(255, 255, 255);
   border-top: 2px solid #0095ff !important;
-  font-size: medium;
+  font-size: medium !important;
+  font-weight: 600 !important;
 }
 .ag-header-group-cell-with-group {
   background-color: #33cc3344 !important;

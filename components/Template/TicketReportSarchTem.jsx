@@ -96,7 +96,6 @@ function TicketReportSarchTem({
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-    
         }}
       >
         <Box
@@ -104,7 +103,6 @@ function TicketReportSarchTem({
             display: "flex",
             flexDirection: "column",
             width: "100%",
-
           }}
         >
           <Select

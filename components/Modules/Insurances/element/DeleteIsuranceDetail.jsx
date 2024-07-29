@@ -7,6 +7,7 @@ import { deleteDetailInsurance } from "../../../../api/fetchData";
 import toast from "react-hot-toast";
 
 function DeleteIsuranceDetail({ params }) {
+  console.log(params);
   const [isShowModal, setIsShowModal] = useState(false);
   const queryKey = "InsuranceReport";
   const queryClient = useQueryClient();
@@ -16,7 +17,8 @@ function DeleteIsuranceDetail({ params }) {
     onSuccess: () => {
       setIsShowModal(false);
       toast.success("با موفقیت حذف شد");
-      queryClient.invalidateQueries("InsuranceReport")
+
+      queryClient.invalidateQueries("InsuranceReport");
     },
     onError: (error) => {
       setIsShowModal(false);

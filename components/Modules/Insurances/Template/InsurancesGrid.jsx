@@ -18,14 +18,22 @@ function InsurancesGrid({
   serverId,
 }) {
   const parentGridRef = useRef(null);
-
   const getRowData = (params) => {
     const data = params?.data?.rates.map((child) => {
-      return { ...child, parentId: params.data.id, serverId: serverId };
+      return {
+        ...child,
+        parentId: params.data.id,
+        serverId: serverId,
+      };
     });
     return data;
   };
-
+  const addColumonData = (data) => {
+    const newData = data?.map((item) => {
+      return { ...item, serverId: serverId, tripTypeCode: tripTypeCode };
+    });
+    return newData;
+  };
   return (
     <Grid
       parentGridRef={parentGridRef}
@@ -42,7 +50,7 @@ function InsurancesGrid({
           ? CharterDetailDef
           : abroadDetailDef
       }
-      data={data}
+      data={addColumonData(data)}
       isFetching={isFetching}
       groupName="نوع ماشین"
       // detailKey={detailKey}

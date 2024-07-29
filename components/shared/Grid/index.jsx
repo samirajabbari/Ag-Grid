@@ -75,8 +75,11 @@ const Grid = ({
 
     onFilterChange(filteredData);
   };
-
+  const onRefreshMasterGrid = () => {
+    gridRef.current?.api?.refreshCells();
+  };
   const handleGridReady = (params) => {
+    gridRef.current.api.refreshCells();
     gridRef.current = params;
     params.columnApi?.autoSizeAllColumns();
   };
@@ -94,7 +97,6 @@ const Grid = ({
   const autoSizeStrategy = { type: "fitCellContents" };
 
   const onRowGroupOpened = (params) => {
-    console.log(params);
     if (params.node.expanded) {
       gridRef.current?.columnApi?.autoSizeAllColumns();
     }

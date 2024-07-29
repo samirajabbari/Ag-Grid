@@ -108,7 +108,7 @@ export const insuranceDetailDef = [
     headerName: "عملیات",
     field: "",
     cellRenderer: function (params) {
-      return React.createElement(DeleteIsuranceDetail, { params: params.data });
+      return React.createElement(DeleteIsuranceDetail, { params: params.data});
     },
   },
 ];

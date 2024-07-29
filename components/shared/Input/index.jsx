@@ -6,7 +6,6 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-
 const labelSx = {
   fontFamily: "IranSans",
   fontWeight: 200,
@@ -22,6 +21,8 @@ function InputText({
   type,
   disabled,
   style,
+  onChange,
+  control,
 }) {
   const {
     control,
@@ -56,6 +57,7 @@ function InputText({
             sx={style}
             error={!!errors[name]}
             variant={variant}
+            onChange={onChange}
             type={
               type === "password" ? (showPassword ? "text" : "password") : type
             }

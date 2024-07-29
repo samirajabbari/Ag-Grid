@@ -12,18 +12,16 @@ function InsurancesReport() {
   const [tripTypeCode, setTripTypeCode] = useState("interCity");
   const [searchData, setSearchData] = useState();
   const [isSearchEnabled, setIsSearchEnabled] = useState(false);
-  const [expandedRowIds, setExpandedRowIds] = useState([]);
 
-  // const onRowGroupOpened = useCallback((params) => {
-  //   const expandedIds = params.api.getSelectedNodes().map(node => node.id);
-  //   setExpandedRowIds(expandedIds);
-  // }, []);
   useEffect(() => {
     if (server && server.length > 0) {
       setServerId(server[0].id);
       setSearchData({ serverId: server[0].id, tripTypeCode });
     }
-  }, [server]);
+  }, []);
+  useEffect(() => {
+    setServerId(searchData?.serverId);
+  }, [searchData]);
 
   const {
     data,

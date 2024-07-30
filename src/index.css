@@ -195,3 +195,35 @@ a {
   box-shadow: "0px 10px 15px -3px rgba(0,0,0,0.1),0px 10px 15px -3px rgba(0,0,0,0.1)" !important;
   border-radius: 0.7rem !important;
 }
+.css-1q6at85-MuiInputBase-root-MuiOutlinedInput-root {
+  direction: ltr !important;
+  font-family: "IranSans" !important;
+}
+.css-1pnmrwp-MuiTypography-root {
+  font-family: "IranSans" !important;
+}
+.css-j204z7-MuiFormControlLabel-root .MuiFormControlLabel-label {
+  font-family: "IranSans" !important;
+}
+.css-1s5lphu-MuiPopper-root-MuiAutocomplete-popper {
+  z-index: 100000 !important;
+}
+.MuiAutocomplete-hasPopupIcon.MuiAutocomplete-hasClearIcon.css-ka7ti6-MuiAutocomplete-root
+  .MuiOutlinedInput-root {
+  padding-right: 14px !important;
+}
+.css-14a9yj2-MuiFormLabel-root-MuiInputLabel-root {
+  position: absolute !important;
+  transform-origin: none;
+  text-align: right;
+  right: 2rem !important;
+  left: none !important;
+  top: -25px !important;
+  transform-origin: top right !important;
+  background-color: #ffffff !important;
+  width: fit-content !important ;
+  padding: 0px 5px !important;
+  font-size: small !important;
+  font-weight: 800 !important;
+  color: #1976d2 !important;
+}

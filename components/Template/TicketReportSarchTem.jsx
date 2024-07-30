@@ -134,6 +134,8 @@ function TicketReportSarchTem({
             defaultValue={searchData.componies || []}
             style={sxStyle}
             options={componies}
+            multiple={true}
+            placeHolder="همه"
             getOptionLabel={(option) => option?.name}
             onChange={(e, newValue) =>
               setSearchData((prev) => ({

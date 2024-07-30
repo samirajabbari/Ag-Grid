@@ -6,6 +6,7 @@ import { InputText } from "./Input";
 import { Modals } from "./Modal";
 import { Grid } from "./Grid";
 import { RedioButton } from "./RadioButton";
+import { PriceInput } from "./PriceInput/Index";
 export {
   Button,
   Select,
@@ -15,4 +16,5 @@ export {
   Modals,
   Grid,
   RedioButton,
+  PriceInput,
 };

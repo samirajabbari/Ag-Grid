@@ -1,18 +1,22 @@
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import PropTypes from "prop-types";
-import { TextField, IconButton, InputLabel, FormControl } from "@mui/material";
+import {
+  TextField,
+  IconButton,
+  InputLabel,
+  FormControl,
+  InputAdornment,
+} from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-
+import { useState } from "react";
 
 const labelSx = {
   fontFamily: "IranSans",
   fontWeight: 200,
 };
 
-function InputText({
+function PriceInput({
   placeholder,
   label,
   rules,
@@ -22,46 +26,50 @@ function InputText({
   type,
   disabled,
   style,
+  control,
 }) {
-  const {
-    control,
-    formState: { errors },
-    getValues,
-  } = useFormContext();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
-  useEffect(() => {
-    if (errors[name]) {
-      toast.error(helperText);
-    }
-  }, [errors]);
+
+  const formatPrice = (value) => {
+    return value?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  const handleChange = (event, field) => {
+    const { value } = event.target;
+    const formattedValue = formatPrice(value.replace(/,/g, ""));
+    field.onChange(formattedValue);
+  };
   return (
     <Controller
       name={name}
       control={control}
       rules={rules}
-      defaultValue={getValues(name)}
       render={({ field }) => (
         <FormControl>
           <InputLabel shrink sx={labelSx} id="InputLabel">
             {label}
           </InputLabel>
           <TextField
+            autoComplete="off"
             disabled={disabled}
             {...field}
             placeholder={placeholder}
             sx={style}
-            error={!!errors[name]}
             variant={variant}
+            value={formatPrice(field.value)}
+            onChange={(event) => handleChange(event, field)}
             type={
               type === "password" ? (showPassword ? "text" : "password") : type
             }
             InputProps={{
               endAdornment:
-                type === "password" ? (
+                type !== "password" ? (
+                  <InputAdornment position="end">ریال</InputAdornment>
+                ) : (
                   <IconButton
                     aria-label="toggle password visibility"
                     onClick={handleClickShowPassword}
@@ -69,7 +77,7 @@ function InputText({
                   >
                     {showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
-                ) : null,
+                ),
               dir: "ltr",
             }}
           />
@@ -79,7 +87,7 @@ function InputText({
   );
 }
 
-InputText.propTypes = {
+PriceInput.propTypes = {
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   label: PropTypes.string,
@@ -89,9 +97,10 @@ InputText.propTypes = {
   type: PropTypes.string,
   disabled: PropTypes.bool,
   style: PropTypes.object,
+  control: PropTypes.object.isRequired,
 };
 
-InputText.defaultProps = {
+PriceInput.defaultProps = {
   placeholder: "",
   label: "",
   rules: {},
@@ -102,4 +111,4 @@ InputText.defaultProps = {
   style: {},
 };
 
-export { InputText };
+export { PriceInput };

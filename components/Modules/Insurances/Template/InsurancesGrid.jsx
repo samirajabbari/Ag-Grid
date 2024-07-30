@@ -30,7 +30,12 @@ function InsurancesGrid({
   };
   const addColumonData = (data) => {
     const newData = data?.map((item) => {
-      return { ...item, serverId: serverId, tripTypeCode: tripTypeCode };
+      return {
+        ...item,
+        serverId: serverId,
+        tripTypeCode: tripTypeCode,
+        rowId: item.id,
+      };
     });
     return newData;
   };

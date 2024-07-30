@@ -5,8 +5,9 @@ import {
   Autocomplete,
   Select,
   RedioButton,
-  InputText,
+  // PriceInput,
   Button,
+  PriceInput,
 } from "../../../shared";
 import {
   Box,
@@ -14,27 +15,30 @@ import {
   FormControl,
   FormLabel,
   IconButton,
+  InputLabel,
   MenuItem,
   RadioGroup,
   Stack,
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { serverContext } from "../../../../src/App";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addNewInsuranceRates } from "../../../../api/fetchData";
+import toast from "react-hot-toast";
 
 function AddInsuranseDetail({ params }) {
-  const methods = useForm();
-  const { handleSubmit, setValue, control } = useForm();
+  const { control, handleSubmit, watch, setValue } = useForm();
+  const watche = watch();
   const { server } = useContext(serverContext);
+  const [selectedCompany, setSelectedCompany] = useState({});
   const [isShowModal, setIsShowModal] = useState(false);
-  const [companyList, setCompanyList] = useState([]);
-  const [selectedCompany, setSelectedCompany] = useState("");
-
+  const [companyList, setCompanyList] = useState();
+  const queryClient = useQueryClient();
   const addDetailHandler = () => {
     setIsShowModal(true);
   };
-
   useEffect(() => {
     if (isShowModal) {
       companies();
@@ -44,13 +48,12 @@ function AddInsuranseDetail({ params }) {
   const companies = () => {
     const foundServer = server.find((item) => item.id === params?.serverId);
     if (foundServer) {
-      setCompanyList(foundServer.companies);
+      setCompanyList(foundServer.companies || []);
+    } else {
+      setCompanyList([]);
     }
   };
-  const priceFormat = (e) => {
-    const valueFormat = e.target.value.toLocaleString("fa-IR");
-    return valueFormat;
-  };
+
   const sxStyle = {
     marginTop: "1rem",
     fontFamily: "IranSans",
@@ -60,15 +63,36 @@ function AddInsuranseDetail({ params }) {
     marginBottom: "1rem",
     fontFamily: "IranSans",
     fontSize: "1rem",
+    direction: "ltr !important",
   };
   const radioBoxStyle = {
     margin: "1rem 0px",
     fontFamily: "IranSans",
-    fontWeight: 200,
+    fontWeight: 600,
+    padding: "1rem",
+    border: "1px solid #cdccca",
+    borderRadius: "4px",
   };
+  const { mutate } = useMutation({
+    mutationFn: addNewInsuranceRates,
+    onSuccess: () => {
+      setIsShowModal(false);
+      toast.success("با موفقیت اضافه شد");
+
+      queryClient.invalidateQueries("InsuranceReport");
+    },
+    onError: (error) => {
+      setIsShowModal(false);
+      queryClient.invalidateQueries(queryKey);
+      console.error("خطا در ورود:", error.message);
+      toast.error("افزودن آیتم با مشکل مواجه شد");
+    },
+  });
   const onSubmit = (data) => {
-    console.log("module data", data);
+    console.log("watch", watche);
+    mutate({ ...watche, rateId: params.rowId, company: selectedCompany });
   };
+ 
   return (
     <>
       <button
@@ -119,6 +143,7 @@ function AddInsuranseDetail({ params }) {
               display: "flex",
               flexDirection: "column",
             }}
+            onSubmit={handleSubmit(onSubmit)}
           >
             <Select
               label={"سرور"}
@@ -143,65 +168,80 @@ function AddInsuranseDetail({ params }) {
 
             <Autocomplete
               label={"شرکت‌ها"}
-              name={"componies"}
+              name={"company"}
               control={control}
-              defaultValue={""}
+              defaultValue={selectedCompany.code}
               style={sxStyle}
               options={companyList}
-              getOptionLabel={(option) => option?.name}
-              onChange={(e, newValue) =>
-                setSelectedCompany((prev) => ({
-                  ...prev,
-                  companies: newValue.map((item) => item.code),
-                }))
-              }
+              multiple={false}
+              placeHolder={""}
+              getOptionLabel={(option) => option?.name || ""}
+              onChange={(e, newValue) => {
+                console.log(newValue);
+                setSelectedCompany({
+                  code: newValue.code,
+                  name: newValue.name,
+                });
+                // setValue("company", {
+                //   code: newValue.code,
+                //   name: newValue.name,
+                // });
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="شرکت‌ها"
+                  variant="outlined"
+                  fullWidth
+                />
+              )}
             />
-            <FormControl sx={radioBoxStyle}>
-              <FormLabel id="BodyInsurance" sx={{ fontFamily: "IranSans" }}>
+            <FormControl sx={radioBoxStyle} label="BodyInsurance">
+              <InputLabel
+                id="BodyInsurance"
+                sx={{ fontFamily: "IranSans", color: "#1976d2" }}
+              >
                 بیمه بدنه:
-              </FormLabel>
+              </InputLabel>
               <RadioGroup
                 row
                 aria-labelledby="BodyInsurance"
-                name="row-radio-buttons-group"
+                name="BodyInsurance"
               >
                 <RedioButton
-                  value={"true"}
+                  value={true}
                   control={control}
                   label={"دارد"}
-                  name="hasBodyInsurance"
+                  name="BodyInsurance-hasInsuranced"
                   style={{}}
                 />
                 <RedioButton
-                  value={"false"}
+                  value={false}
                   label={"ندارد"}
                   control={control}
-                  name="noBodyInsurance"
+                  name="BodyInsurance-hasInsuranced"
                   style={{}}
                 />
               </RadioGroup>
             </FormControl>
-            <InputText
+            <PriceInput
               disabled={false}
               name="price"
-              placeholder="نرخ"
+              placeholder=""
               control={control}
               label="نرخ"
-              rules={{ required: "این فیلد الزامی است" }}
-              helperText="وارد کردن نرخ جدید الزامی است"
+              rules={{}}
+              helperText=""
               style={inputStyle}
-              onChange={(e) => priceFormat(e)}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ fontFamily: "IranSans", width: "100%" }}
+              type="submit"
+              title="افزودن"
             />
           </form>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ fontFamily: "IranSans", width: "100%" }}
-            type="submit"
-            onClick={onSubmit}
-          >
-            ثبت
-          </Button>
         </Modals>
       )}
     </>

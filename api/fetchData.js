@@ -1,3 +1,4 @@
+import { converttoNumber } from "../utiles/convetNumbetrPrice";
 import Api from "./api";
 export const fetchToken = async (data) => {
   const response = await Api.post("/Token", {
@@ -53,13 +54,31 @@ export const insuranceList = async ({ queryKey }) => {
   }
 };
 export const deleteDetailInsurance = async ({ parentId, rateId, serverId }) => {
-  console.log(parentId, rateId, serverId);
   try {
     const res = await Api.delete(
       `/api/v1.0-rc/insurances/${parentId}/rates/${rateId}`,
       {
         params: {
           serverId: serverId,
+        },
+      }
+    );
+    return res;
+  } catch (error) {
+    return error;
+  }
+};
+export const addNewInsuranceRates = async (data) => {
+  console.log(data);
+  try {
+    const res = await Api.post(
+      `/api/v1.0-rc/insurances/${data.rateId}/rates?serverId=${data.serverId}`,
+      {
+        rates: {
+          company: data.company,
+          bodyInsurance_hasInssured: data.bodyInsurance_hasInssured,
+          price: converttoNumber(data.price),
+          effectiveDateTime: new Date(),
         },
       }
     );
